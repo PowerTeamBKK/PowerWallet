@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import "@chainlink/contracts/src/v0.8/automation/interfaces/AutomationCompatibleInterface.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 
 import { IStrategy } from "./strategies/IStrategy.sol";
 import { ISwapsRouter } from "./swaps/ISwapsRouter.sol";
@@ -27,7 +28,7 @@ struct Transaction {
 	uint256 timestamp;
 }
 
-contract Wallet is Ownable, AutomationCompatibleInterface, IWallet {
+contract Wallet is Ownable, AutomationCompatibleInterface, IWallet, Pausable {
 	using TokenMaths for uint;
 
 	IERC20Metadata public stableAsset;
@@ -52,6 +53,18 @@ contract Wallet is Ownable, AutomationCompatibleInterface, IWallet {
 
 	uint256 public totalDeposited;
 	uint256 public totalWithdrawn;
+
+	function pause() external onlyOwner {
+		_pause();
+	}
+
+	function unpause() external onlyOwner {
+		_unpause();
+	}
+
+	function isPaused() external view returns (bool) {
+		return paused();
+	}
 
 	constructor(
 		address stableTokenAddress,
@@ -106,13 +119,6 @@ contract Wallet is Ownable, AutomationCompatibleInterface, IWallet {
 		);
 		emit Withdrawn(token, amount);
 	}
-
-	function pause() external onlyOwner {}
-
-	function unpause() external onlyOwner {}
-
-	//// View Functions ////
-	function isPaused() external view returns (bool) {}
 
 	function getTransactions() public view returns (Transaction[] memory) {
 		return transactions;
@@ -183,7 +189,9 @@ contract Wallet is Ownable, AutomationCompatibleInterface, IWallet {
 		return (strategy.shouldPerformUpkeep(), "");
 	}
 
-	function performUpkeep(bytes calldata /* performData */) external override {
+	function performUpkeep(
+		bytes calldata /* performData */
+	) external override whenNotPaused {
 		if (strategy.shouldPerformUpkeep()) {
 			strategyExec();
 		}
