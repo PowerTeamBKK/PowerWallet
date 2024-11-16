@@ -13,6 +13,8 @@ import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaf
 const DollarCostAverage: NextPage = () => {
   const { address: connectedAddress } = useAccount();
 
+ 
+
 
   const { data: userWallets, isLoading } = useScaffoldReadContract({
     contractName: "factory",
@@ -21,6 +23,20 @@ const DollarCostAverage: NextPage = () => {
   });
 
   const firstWallet = userWallets?.[0];
+
+  const { data: usdcBalance } = useScaffoldReadContract({
+    contractName: "usdc",
+    functionName: "balanceOf",
+    args: [firstWallet],
+  });
+
+  const displayedBalance = usdcBalance ? usdcBalance.toString() : "0";
+
+   // const { data: wBtcBalance, isLoading } = useScaffoldReadContract({
+  //   contractName: "usdc",
+  //   functionName: "balanceOf",
+  //   args: [firstWallet],
+  // });
 
 
  
@@ -78,7 +94,7 @@ const DollarCostAverage: NextPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-base-200 rounded-full p-6 text-center">
             <h3 className="text-lg text-base-content/60 mb-2">Portfolio Value</h3>
-            <p className="text-2xl font-bold">$10,000.00</p>
+            <p className="text-2xl font-bold">${displayedBalance} USDC</p>
           </div>
           <div className="bg-base-200 rounded-full p-6 text-center">
             <h3 className="text-lg text-base-content/60 mb-2">Return on Investment</h3>
