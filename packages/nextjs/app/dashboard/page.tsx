@@ -90,84 +90,84 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-       <div className="bg-base-100 p-2 rounded-xl max-w-4xl w-full mx-4 flex flex-col md:flex-row gap-6">
-    {/* Image container */}
-    <div className="w-full md:w-1/2 flex justify-center md:justify-start">
-      <Image
-        src="/SLAddStrat.jpg"
-        alt="Snow Leapard"
-        width={300}
-        height={300}
-        className="rounded-xl object-cover"
-      />
-    </div>
-    
-    {/* Form container */}
-    <div className="w-full md:w-1/2">
-      <h3 className="text-2xl font-bold mb-4">Create New Strategy</h3>
-      <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="label">1. Select Strategy</label>
-            <select
-              className="select select-bordered w-full"
-              value={selectedStrategy}
-              onChange={e => setSelectedStrategy(e.target.value)}
-            >
-              <option value="dca">Pure DCA</option>
-              <option value="powerLawLow">Easy</option>
-              <option value="powerLawHigh">Bold</option>
-            </select>
-          </div>
+      <div className="bg-base-100 p-2 rounded-xl max-w-4xl w-full mx-4 flex flex-col md:flex-row gap-6">
+        {/* Image container */}
+        <div className="w-full md:w-1/2 flex justify-center md:justify-start">
+          <Image
+            src="/SLAddStrat.jpg"
+            alt="Snow Leapard"
+            width={300}
+            height={300}
+            className="rounded-xl object-cover"
+          />
+        </div>
 
-          <div className="text-sm text-base-content/70 mb-4">
-            {selectedStrategy === "dca" && "Automatically invest a fixed amount at regular intervals."}
-            {selectedStrategy === "powerLawLow" &&
-              "Lower risk strategy using power law formula for dynamic allocation."}
-            {selectedStrategy === "powerLawHigh" &&
-              "Higher risk strategy using power law formula for aggressive allocation."}
-          </div>
+        {/* Form container */}
+        <div className="w-full md:w-1/2">
+          <h3 className="text-2xl font-bold mb-4">Create New Strategy</h3>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="label">1. Select Strategy</label>
+              <select
+                className="select select-bordered w-full"
+                value={selectedStrategy}
+                onChange={e => setSelectedStrategy(e.target.value)}
+              >
+                <option value="dca">Pure DCA</option>
+                <option value="powerLawLow">Easy</option>
+                <option value="powerLawHigh">Bold</option>
+              </select>
+            </div>
 
-          {selectedStrategy === "dca" && (
-            <>
-              <div>
-                <label className="label">2. Allocate Funds (USDC)</label>
-                <input
-                  type="number"
-                  step="1"
-                  min="0"
-                  className="input input-bordered w-full"
-                  value={amount}
-                  onChange={e => setAmount(e.target.value)}
-                  required
-                  disabled={isPending}
-                />
-              </div>
-              <div>
-                <label className="label">3. Select TimeFrame (seconds)</label>
-                <input
-                  type="number"
-                  min="1"
-                  className="input input-bordered w-full"
-                  value={interval}
-                  onChange={e => setInterval(e.target.value)}
-                  required
-                  disabled={isPending}
-                />
-              </div>
-            </>
-          )}
+            <div className="text-sm text-base-content/70 mb-4">
+              {selectedStrategy === "dca" && "Automatically invest a fixed amount at regular intervals."}
+              {selectedStrategy === "powerLawLow" &&
+                "Lower risk strategy using power law formula for dynamic allocation."}
+              {selectedStrategy === "powerLawHigh" &&
+                "Higher risk strategy using power law formula for aggressive allocation."}
+            </div>
 
-          <div className="flex justify-end gap-2">
-            <button type="button" className="btn" onClick={onClose} disabled={isPending}>
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-primary" disabled={isPending}>
-              {isPending ? "Creating..." : "Create Strategy"}
-            </button>
-          </div>
-        </form>
+            {selectedStrategy === "dca" && (
+              <>
+                <div>
+                  <label className="label">2. Allocate Funds (USDC)</label>
+                  <input
+                    type="number"
+                    step="1"
+                    min="0"
+                    className="input input-bordered w-full"
+                    value={amount}
+                    onChange={e => setAmount(e.target.value)}
+                    required
+                    disabled={isPending}
+                  />
+                </div>
+                <div>
+                  <label className="label">3. Select TimeFrame (seconds)</label>
+                  <input
+                    type="number"
+                    min="1"
+                    className="input input-bordered w-full"
+                    value={interval}
+                    onChange={e => setInterval(e.target.value)}
+                    required
+                    disabled={isPending}
+                  />
+                </div>
+              </>
+            )}
+
+            <div className="flex justify-end gap-2">
+              <button type="button" className="btn" onClick={onClose} disabled={isPending}>
+                Cancel
+              </button>
+              <button type="submit" className="btn btn-primary" disabled={isPending}>
+                {isPending ? "Creating..." : "Create Strategy"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
@@ -175,107 +175,11 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
 const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
   const { writeContractAsync: writeUSDCContractAsync } = useScaffoldWriteContract("usdc");
 
-  const approveUsdc = async (e: React.FormEvent) => {
-    e.preventDefault();
 
-    // wallet address
-
-    const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
-    const amount = "1";
-
-    await writeUSDCContractAsync(
-      {
-        functionName: "approve",
-        args: [walletAddress, BigInt(amount)],
-      },
-      {
-        onBlockConfirmation: txnReceipt => {
-          console.log("📦 Transaction blockHash", txnReceipt.blockHash);
-          toast.success("USDC approved!");
-        },
-      },
-    );
-  };
 
   const { writeContractAsync: writeWalletContractAsync } = useWriteContract();
   const writeTx = useTransactor();
 
-  const pauseWallet = async (e: React.FormEvent) => {
-    e.preventDefault();
-
- 
- 
-
-    await writeUSDCContractAsync(
-      {
-        functionName: "pause",
-      },
-      {
-        onBlockConfirmation: txnReceipt => {
-          console.log("📦 Transaction blockHash", txnReceipt.blockHash);
-          toast.success("pause !");
-
-        },
-      },
-    );
-
-  };
-
-  const unpauseWallet = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // wallet address
- 
-
-    await writeUSDCContractAsync(
-      {
-        functionName: "unpause",
-       },
-      {
-        onBlockConfirmation: txnReceipt => {
-          console.log("📦 Transaction blockHash", txnReceipt.blockHash);
-          toast.success("Pause contract!");
-
-        },
-      },
-    );
-
-  };
- const depositUsdc = async () => {
-    const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
-    const amount = 1n;
-    const writeContractAsyncWithParams = () =>
-      writeWalletContractAsync({
-        address: walletAddress,
-        abi: DeployedContracts[84532].wallet.abi,
-        functionName: "deposit",
-        args: [amount],
-      });
-
-    try {
-      await writeTx(writeContractAsyncWithParams, { blockConfirmations: 1 });
-    } catch (e) {
-      console.log("Unexpected error in writeTx", e);
-    }
-  };
-
-  const withdrawUsdc = async () => {
-    const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
-    const amount = 1n;
-    const writeContractAsyncWithParams = () =>
-      writeWalletContractAsync({
-        address: walletAddress,
-        abi: DeployedContracts[84532].wallet.abi,
-        functionName: "withdraw",
-        args: [amount],
-      });
-
-    try {
-      await writeTx(writeContractAsyncWithParams, { blockConfirmations: 1 });
-    } catch (e) {
-      console.log("Unexpected error in writeTx", e);
-    }
-  };
 
   return (
     <div className="space-y-2">
@@ -318,7 +222,7 @@ const Dashboard: NextPage = () => {
   }
 
   return (
-   <div className="max-w-1xl mx-auto p-4 mt-16 lg:mt-2">
+    <div className="max-w-1xl mx-auto p-4 mt-16 lg:mt-2">
       {/* Oval Header */}
       <div className="bg-base-100 rounded-xl shadow-lg p-6 mb-8 flex justify-between items-center">
         <h1 className="text-3xl font-bold">Your Strategies</h1>

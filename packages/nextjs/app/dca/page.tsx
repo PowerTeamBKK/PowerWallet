@@ -4,7 +4,7 @@ import { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { WalletIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
- import { PlusIcon } from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/24/outline";
 import DeployedContracts from "~~/contracts/deployedContracts";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useWriteContract } from "wagmi";
@@ -13,7 +13,7 @@ import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaf
 
 
 
- 
+
 const DollarCostAverage: NextPage = () => {
   const { address: connectedAddress } = useAccount();
 
@@ -69,7 +69,7 @@ const DollarCostAverage: NextPage = () => {
             <Address address={firstWallet} />
           </div>
         </div> */}
-                      <WalletList wallets={userWallets as `0x${string}`[]} />
+        <WalletList wallets={userWallets as `0x${string}`[]} />
 
       </div>
 
@@ -110,7 +110,7 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
 
     // wallet address
 
-    const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
+    const walletAddress = wallets[0];
     const amount = "1";
 
     await writeUSDCContractAsync(
@@ -133,8 +133,8 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
   const pauseWallet = async (e: React.FormEvent) => {
     e.preventDefault();
 
- 
- 
+
+
 
     await writeUSDCContractAsync(
       {
@@ -155,12 +155,12 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
     e.preventDefault();
 
     // wallet address
- 
+
 
     await writeUSDCContractAsync(
       {
         functionName: "unpause",
-       },
+      },
       {
         onBlockConfirmation: txnReceipt => {
           console.log("📦 Transaction blockHash", txnReceipt.blockHash);
@@ -171,8 +171,8 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
     );
 
   };
- const depositUsdc = async () => {
-    const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
+  const depositUsdc = async () => {
+    const walletAddress = wallets[0];
     const amount = 1n;
     const writeContractAsyncWithParams = () =>
       writeWalletContractAsync({
@@ -190,7 +190,7 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
   };
 
   const withdrawUsdc = async () => {
-    const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
+    const walletAddress = wallets[0];
     const amount = 1n;
     const writeContractAsyncWithParams = () =>
       writeWalletContractAsync({
