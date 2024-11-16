@@ -140,6 +140,8 @@ export const deployWalletContract = async () => {
 
   // deploy swaps router contract
   const SwapsRouter = await ethers.getContractFactory("SwapsRouter");
+  console.log(`transferFunds`);
+
   const swapsRouter = await SwapsRouter.deploy(uniswapV3QuoterAddress, uniswapV3RouterAddress,{
     maxFeePerGas: 41270515044,
   });
@@ -156,6 +158,7 @@ export const deployWalletContract = async () => {
       maxFeePerGas: 41270515044,
     },
   );
+
    // fund user0 and user1 with USDC
   await transferFunds(user0, owner.address);
   await fundAccount(1000 * USDC, user0.address);

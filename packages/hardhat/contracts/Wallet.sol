@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import "@chainlink/contracts/src/v0.8/automation/interfaces/AutomationCompatibleInterface.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
+
 
 import { IStrategy } from "./strategies/IStrategy.sol";
 import { ISwapsRouter } from "./swaps/ISwapsRouter.sol";
@@ -32,7 +34,7 @@ struct Transaction {
 	uint256 timestamp;
 }
 
-contract Wallet is Ownable, AutomationCompatibleInterface, IWallet, Pausable {
+contract Wallet is Ownable, AutomationCompatibleInterface, IWallet, Pausable,AccessControl {
 	using TokenMaths for uint;
 
 	IERC20Metadata public stableAsset;
@@ -57,6 +59,8 @@ contract Wallet is Ownable, AutomationCompatibleInterface, IWallet, Pausable {
 
 	uint256 public totalDeposited;
 	uint256 public totalWithdrawn;
+	bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
+
 
 	function pause() external onlyOwner {
 		_pause();
@@ -83,6 +87,10 @@ contract Wallet is Ownable, AutomationCompatibleInterface, IWallet, Pausable {
 		riskAssetFeed = AggregatorV3Interface(riskAssetFeedAddress);
 
 		swapRouter = ISwapsRouter(swapRouterAddress);
+        // to grant and revoke any roles
+		        _grantRole(PAUSER_ROLE, msg.sender);
+
+ 
 	}
 
 	function deposit(uint256 amount) external onlyOwner {

@@ -200,7 +200,48 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
   const { writeContractAsync: writeWalletContractAsync } = useWriteContract();
   const writeTx = useTransactor();
 
-  const depositUsdc = async () => {
+  const pauseWallet = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+ 
+ 
+
+    await writeUSDCContractAsync(
+      {
+        functionName: "pause",
+      },
+      {
+        onBlockConfirmation: txnReceipt => {
+          console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+          toast.success("pause !");
+
+        },
+      },
+    );
+
+  };
+
+  const unpauseWallet = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // wallet address
+ 
+
+    await writeUSDCContractAsync(
+      {
+        functionName: "unpause",
+       },
+      {
+        onBlockConfirmation: txnReceipt => {
+          console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+          toast.success("Pause contract!");
+
+        },
+      },
+    );
+
+  };
+ const depositUsdc = async () => {
     const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
     const amount = 1n;
     const writeContractAsyncWithParams = () =>
@@ -253,6 +294,16 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
           <button className="btn btn-primary" onClick={withdrawUsdc}>
             <PlusIcon className="h-5 w-5" />
             Withdraw
+          </button>
+
+          <button className="btn btn-primary" onClick={pauseWallet}>
+            <PlusIcon className="h-5 w-5" />
+            pause
+          </button>
+
+          <button className="btn btn-primary" onClick={unpauseWallet}>
+            <PlusIcon className="h-5 w-5" />
+            unpaused
           </button>
         </div>
       ))}

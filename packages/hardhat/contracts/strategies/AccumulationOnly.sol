@@ -20,6 +20,10 @@ contract AccumulationOnly is IStrategy, Ownable
     }
   
     //// IStrategy Interface //// 
+    
+    function name() external view returns (string) {
+        return "DCA";
+    }
 
     function exec() external returns (StrategyAction action, uint256 amountIn) {
         if (block.timestamp < lastEvalTimestamp + upkeepInterval) {

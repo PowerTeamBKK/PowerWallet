@@ -53,6 +53,10 @@ contract PowerLawHigh is IStrategy, Ownable {
 
     //// IStrategy interface ////
 
+    function name() external view returns (string) {
+        return "BOLD";
+    }
+
     function exec() external override returns (StrategyAction action, uint amountIn) {
         require(msg.sender == address(wallet), "Only wallet can call this function");
         require(shouldPerformUpkeep(), "Should not run strategy");
