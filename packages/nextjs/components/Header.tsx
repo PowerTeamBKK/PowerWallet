@@ -68,6 +68,8 @@ const HeaderMenuLinks = ({ onLinkClick }: { onLinkClick?: () => void }) => {
 export const Header = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const { address: connectedAddress } = useAccount();
 
   useOutsideClick(
     menuRef,
@@ -79,6 +81,11 @@ export const Header = () => {
   const handleClose = useCallback(() => {
     setIsDrawerOpen(false);
   }, []);
+
+  // Hide header on the landing page if the wallet is not connected
+  if (pathname === "/" && !connectedAddress) {
+    return null;
+  }
 
   return (
     <>

@@ -6,7 +6,7 @@ export const WrongNetworkDropdown = () => {
   const { disconnect } = useDisconnect();
 
   return (
-    <div className="dropdown dropdown-end dropdown-top ml-10">
+    <div className="dropdown dropdown-end dropdown-top ml-6 mb-4">
       <label tabIndex={0} className="btn btn-error btn-sm dropdown-toggle gap-1">
         <span>Wrong network</span>
         <ChevronUpIcon className="h-6 w-4 ml-2 sm:ml-8" />
