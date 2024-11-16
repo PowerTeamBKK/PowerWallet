@@ -60,6 +60,23 @@ Run smart contract test with `yarn hardhat:test`
 - Edit your frontend homepage at `packages/nextjs/app/page.tsx`. 
 - Edit your deployment scripts in `packages/hardhat/deploy`
 
+## Smart Contract
+
+### Test
+
+To run tests:
+```
+cd packages/hardhat
+npx hardhat test
+```
+
+### Deploy 
+
+To deploy the Factory contract:
+```
+npx hardhat run scripts/deployFactory.ts --network baseSepolia
+```
+
 ## Documentation
 
 Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
