@@ -1,13 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import FactoryABI from "./Factory.json";
 import { NextPage } from "next";
 import { toast } from "react-hot-toast";
-// import { parseEther } from "viem";
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { useAccount } from "wagmi";
 import { PlusIcon, WalletIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 interface StrategyModalProps {
   isOpen: boolean;
@@ -17,19 +16,24 @@ interface StrategyModalProps {
 const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
   const [amount, setAmount] = useState("");
   const [interval, setInterval] = useState("");
-  const { writeContract } = useWriteContract();
+  const { writeContractAsync: writeFactoryContractAsync, isPending } = useScaffoldWriteContract("factory");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await writeContract({
-        address: "0x24556c87B753Bd30276D6E85FD4D03883C59994D" as `0x${string}`,
-        abi: FactoryABI,
-        functionName: "newWalletDCA",
-        args: ["100000000000", "100000000000"],
-      });
-      toast.success("Strategy created successfully!");
-      onClose();
+      await writeFactoryContractAsync(
+        {
+          functionName: "newWalletDCA",
+          args: [BigInt(amount), BigInt(interval)],
+        },
+        {
+          onBlockConfirmation: txnReceipt => {
+            console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+            toast.success("Strategy created successfully!");
+            onClose();
+          },
+        },
+      );
     } catch (error: any) {
       toast.error(`Failed to create strategy: ${error?.message || "Unknown error"}`);
     }
@@ -52,6 +56,7 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
               value={amount}
               onChange={e => setAmount(e.target.value)}
               required
+              disabled={isPending}
             />
           </div>
           <div>
@@ -63,14 +68,15 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
               value={interval}
               onChange={e => setInterval(e.target.value)}
               required
+              disabled={isPending}
             />
           </div>
           <div className="flex justify-end gap-2">
-            <button type="button" className="btn" onClick={onClose}>
+            <button type="button" className="btn" onClick={onClose} disabled={isPending}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary">
-              {"Create Strategy"}
+            <button type="submit" className="btn btn-primary" disabled={isPending}>
+              {isPending ? "Creating..." : "Create Strategy"}
             </button>
           </div>
         </form>
@@ -96,13 +102,12 @@ const Dashboard: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { address: connectedAddress } = useAccount();
 
-  const { data: userWallets = [], isLoading } = useReadContract({
-    address: "0x24556c87B753Bd30276D6E85FD4D03883C59994D" as `0x${string}`,
-    abi: FactoryABI,
+  const { data: userWallets, isLoading } = useScaffoldReadContract({
+    contractName: "factory",
     functionName: "getWalletsByUser",
     args: [connectedAddress],
   });
-  //   console.log(userWallets, userWallets.length);
+
   if (!connectedAddress) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -125,7 +130,7 @@ const Dashboard: NextPage = () => {
         <div className="text-center">Loading...</div>
       ) : (
         <>
-          {userWallets && userWallets.length > 0 ? (
+          {userWallets && Array.isArray(userWallets) && userWallets.length > 0 ? (
             <WalletList wallets={userWallets as `0x${string}`[]} />
           ) : (
             <div className="text-center py-12">
