@@ -14,6 +14,7 @@ interface StrategyModalProps {
 }
 
 const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
+  const [selectedStrategy, setSelectedStrategy] = useState("dca");
   const [amount, setAmount] = useState("");
   const [interval, setInterval] = useState("");
   const { writeContractAsync: writeFactoryContractAsync, isPending } = useScaffoldWriteContract("factory");
@@ -21,19 +22,49 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await writeFactoryContractAsync(
-        {
-          functionName: "newWalletDCA",
-          args: [BigInt(amount), BigInt(interval)],
-        },
-        {
-          onBlockConfirmation: txnReceipt => {
-            console.log("📦 Transaction blockHash", txnReceipt.blockHash);
-            toast.success("Strategy created successfully!");
-            onClose();
+      if (selectedStrategy === "dca") {
+        // Convert USDC amount (6 decimals)
+        const usdcAmount = BigInt(Math.floor(parseFloat(amount) * 1_000_000));
+        await writeFactoryContractAsync(
+          {
+            functionName: "newWalletDCA",
+            args: [usdcAmount, BigInt(interval)],
           },
-        },
-      );
+          {
+            onBlockConfirmation: txnReceipt => {
+              console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+              toast.success("DCA Strategy created successfully!");
+              onClose();
+            },
+          },
+        );
+      } else if (selectedStrategy === "powerLawLow") {
+        await writeFactoryContractAsync(
+          {
+            functionName: "newWalletPowerLawLow",
+          },
+          {
+            onBlockConfirmation: txnReceipt => {
+              console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+              toast.success("Power Law Low Strategy created successfully!");
+              onClose();
+            },
+          },
+        );
+      } else if (selectedStrategy === "powerLawHigh") {
+        await writeFactoryContractAsync(
+          {
+            functionName: "newWalletPowerLawHigh",
+          },
+          {
+            onBlockConfirmation: txnReceipt => {
+              console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+              toast.success("Power Law High Strategy created successfully!");
+              onClose();
+            },
+          },
+        );
+      }
     } catch (error: any) {
       toast.error(`Failed to create strategy: ${error?.message || "Unknown error"}`);
     }
@@ -47,30 +78,56 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
         <h3 className="text-2xl font-bold mb-4">Create New Strategy</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="label">Amount (ETH)</label>
-            <input
-              type="number"
-              step="0.000000000000000001"
-              min="0"
-              className="input input-bordered w-full"
-              value={amount}
-              onChange={e => setAmount(e.target.value)}
-              required
-              disabled={isPending}
-            />
+            <label className="label">Strategy Type</label>
+            <select
+              className="select select-bordered w-full"
+              value={selectedStrategy}
+              onChange={e => setSelectedStrategy(e.target.value)}
+            >
+              <option value="dca">Dollar Cost Averaging</option>
+              <option value="powerLawLow">Power Law Low Risk</option>
+              <option value="powerLawHigh">Power Law High Risk</option>
+            </select>
           </div>
-          <div>
-            <label className="label">Interval (seconds)</label>
-            <input
-              type="number"
-              min="1"
-              className="input input-bordered w-full"
-              value={interval}
-              onChange={e => setInterval(e.target.value)}
-              required
-              disabled={isPending}
-            />
+
+          <div className="text-sm text-base-content/70 mb-4">
+            {selectedStrategy === "dca" && "Automatically invest a fixed amount at regular intervals."}
+            {selectedStrategy === "powerLawLow" &&
+              "Lower risk strategy using power law formula for dynamic allocation."}
+            {selectedStrategy === "powerLawHigh" &&
+              "Higher risk strategy using power law formula for aggressive allocation."}
           </div>
+
+          {selectedStrategy === "dca" && (
+            <>
+              <div>
+                <label className="label">Amount (USDC)</label>
+                <input
+                  type="number"
+                  step="1"
+                  min="0"
+                  className="input input-bordered w-full"
+                  value={amount}
+                  onChange={e => setAmount(e.target.value)}
+                  required
+                  disabled={isPending}
+                />
+              </div>
+              <div>
+                <label className="label">Interval (seconds)</label>
+                <input
+                  type="number"
+                  min="1"
+                  className="input input-bordered w-full"
+                  value={interval}
+                  onChange={e => setInterval(e.target.value)}
+                  required
+                  disabled={isPending}
+                />
+              </div>
+            </>
+          )}
+
           <div className="flex justify-end gap-2">
             <button type="button" className="btn" onClick={onClose} disabled={isPending}>
               Cancel
