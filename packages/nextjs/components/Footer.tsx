@@ -23,7 +23,7 @@ export const Footer = () => {
           <SwitchTheme className={`pointer-events-auto ${isLocalNetwork ? "self-end md:self-auto" : ""}`} />
         </div>
       </div>
-      <div className="max-w-2xl mx-auto">
+      {/* <div className="max-w-2xl mx-auto">
         <ul className="menu menu-horizontal w-full">
           <div className="flex justify-center items-center gap-2 text-sm w-full">
             <div className="text-center">
@@ -44,7 +44,7 @@ export const Footer = () => {
             </div>
           </div>
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };

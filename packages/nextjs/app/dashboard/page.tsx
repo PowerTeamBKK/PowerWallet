@@ -17,23 +17,21 @@ interface StrategyModalProps {
 
 const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
   const [selectedStrategy, setSelectedStrategy] = useState("dca");
-  const [amount] = useState("");
   const [interval, setInterval] = useState("");
   const [approveAmount, setApproveAmount] = useState(BigInt(0));
   const { writeContractAsync: writeFactoryContractAsync, isPending } = useScaffoldWriteContract("factory");
-
-  // const { writeContractAsync: writeWalletContractAsync, isWalletPending } = useScaffoldWriteContract({contractName:"wallet",});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       if (selectedStrategy === "dca") {
+       
         // Convert USDC amount (6 decimals)
-        const usdcAmount = BigInt(Math.floor(parseFloat(amount) * 1_000_000));
+        const usdcAmount = BigInt(Math.floor(parseFloat(approveAmount.toString()) * 1_000_000));
         await writeFactoryContractAsync(
           {
             functionName: "newWalletDCA",
-            args: [usdcAmount, BigInt(interval)],
+            args: [usdcAmount, BigInt(Number(interval) * 86400)],
           },
           {
             onBlockConfirmation: txnReceipt => {
@@ -129,7 +127,7 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
             {selectedStrategy === "dca" && (
               <>
                 <div>
-                  <label className="label">2. Allocate Funds (USDC)</label>
+                  <label className="label">2. Enter DCA Amount (USDC)</label>
                   <IntegerInput
                     value={approveAmount.toString()}
                     onChange={updatedTxValue => setApproveAmount(BigInt(updatedTxValue))}
@@ -137,7 +135,7 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
                   />
                 </div>
                 <div>
-                  <label className="label">3. Select TimeFrame (seconds)</label>
+                  <label className="label">3. Enter DCA interval (days)</label>
                   <input
                     type="number"
                     min="1"
