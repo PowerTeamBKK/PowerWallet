@@ -71,7 +71,7 @@ contract Wallet is  Ownable, AutomationCompatibleInterface, IWallet {
 
     /// Chainlink Automation ///
 
-    function checkUpkeep(bytes calldata /* checkData */) external view override returns (bool upkeepNeeded, bytes memory performData) {
+    function checkUpkeep(bytes calldata /* checkData */) external pure override returns (bool upkeepNeeded, bytes memory performData) {
         return (false, "");
     }
 
