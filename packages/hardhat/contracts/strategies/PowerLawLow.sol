@@ -71,7 +71,6 @@ contract PowerLawLow is IStrategy, Ownable {
 
     function eval() public view returns (StrategyAction action, uint amountIn) {
 
-        // update the moving average
         int128 modelPrice = currentPowerLawPrice();
 
         ( , int price0, , , ) = stableAssetFeed.latestRoundData();
@@ -79,7 +78,7 @@ contract PowerLawLow is IStrategy, Ownable {
 
         int deltaPricePerc = int(PERCENT_SCALE) * (price0 - int(modelPrice)) / int(modelPrice);
         
-        // should sell when price is 100% above the power law trend
+        // should sell when price is 25% above the power law trend
         uint targetPricePercUpPercent = higherBandPerc * PERCENT_SCALE / 100;
         bool shouldSell = deltaPricePerc > 0 && uint(deltaPricePerc) >= targetPricePercUpPercent;
 
@@ -94,7 +93,7 @@ contract PowerLawLow is IStrategy, Ownable {
             }
         }
 
-        // should buy when price is 30% below the power law trend
+        // should buy when price is 15% below the power law trend
         uint targetPricePercDownPercent = lowerBandPerc * PERCENT_SCALE / 100;
         bool shouldBuy = deltaPricePerc < 0 && deltaPricePerc <= -1 * int(targetPricePercDownPercent);
                     
@@ -148,6 +147,7 @@ contract PowerLawLow is IStrategy, Ownable {
 
         uint256 modelPrice = powerValue / 1e17; // Divide by 1e17 to get the final result
 
-        return int128(uint128(modelPrice));
+        uint256 scaledPrice =  modelPrice * (10 ** riskAsset.decimals());
+        return int128(uint128(scaledPrice));
     }
 }

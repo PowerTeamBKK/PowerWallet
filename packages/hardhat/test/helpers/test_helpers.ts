@@ -1,9 +1,9 @@
 import { ethers, network } from "hardhat";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { Contract } from "ethers";
+import { Contract, ZeroAddress } from "ethers";
 import addresses_json from "../../conf/addresses.json";
 import erc20_abi from "../../abis/erc20.json";
-import pricefeed_abi from "../../abis/pricefeed.json";
+import pricefeed_abi from "./pricefeed_abi.json";
 
 const usdcSource = "0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640"; // rich account owning 86,402,632 USDC
 export const USDC = 1_000_000; // decimals: 6
@@ -57,13 +57,6 @@ export const deployFactoryContract = async () => {
 };
 
 export const deployAccumulationStrategyContract = async () => {
-  
-    
-//     const accumulationStrategy = await AccumulationOnly.deploy({
-//         maxFeePerGas: 41270515044,
-//     });
-    
-// =======
   const [owner, user0] = await ethers.getSigners();
   const AccumulationOnly = await ethers.getContractFactory("AccumulationOnly");
 
@@ -73,6 +66,31 @@ export const deployAccumulationStrategyContract = async () => {
 
   return { accumulationStrategy, owner, user0 };
 };
+
+export const deployPowerLawLowContract = async () => {
+    const [owner, user0] = await ethers.getSigners();
+    const PowerLawLow = await ethers.getContractFactory("PowerLawLow");
+  
+    const usdc = new Contract(usdcAddress, erc20_abi, ethers.provider);
+    const wbtc = new Contract(wbtcAddress, erc20_abi, ethers.provider);
+    const stableAssetFeed = new Contract(usdcUsdFeedAddress, pricefeed_abi, ethers.provider);
+    const riskAssetFeed = new Contract(btcUsdFeedAdress, pricefeed_abi, ethers.provider);
+  
+    const powerLawLowStrategy = await PowerLawLow.deploy(
+        ZeroAddress,
+        usdc.target,
+        wbtc.target,
+        stableAssetFeed.target,
+        riskAssetFeed.target,
+        {
+            maxFeePerGas: 41270515044,
+        }
+    );
+  
+    return { powerLawLowStrategy, wbtc, riskAssetFeed, owner, user0 };
+};
+  
+
 
 async function transferFunds(user: SignerWithAddress, owner: string) {
   const usdc = new Contract(usdcAddress, erc20_abi, ethers.provider);

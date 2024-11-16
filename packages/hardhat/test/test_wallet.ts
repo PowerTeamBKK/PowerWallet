@@ -4,7 +4,7 @@ import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 
 import {parseEther} from 'ethers'
 
-describe.only("Wallet Contract", function () {
+describe("Wallet Contract", function () {
   it("Should desposit USDC", async function () {
     const { wallet, usdc, user0 } = await loadFixture(deployWalletContract);
 
