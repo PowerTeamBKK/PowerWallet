@@ -46,8 +46,8 @@ contract Wallet is Ownable, AutomationCompatibleInterface, IWallet {
 	uint24 public constant feeV3 = 3000; // 0.3% fee
 
 	event Swapped(string side, uint256 sold, uint256 bought, uint256 slippage);
-	event Deposited(address indexed user, uint256 amount);
-	event Withdrawn(address indexed user, uint256 amount);
+	event Deposited(address indexed token, uint256 amount);
+	event Withdrawn(address indexed token, uint256 amount);
 	event SwapError(string reason);
 
 	uint256 public totalDeposited;
@@ -73,6 +73,7 @@ contract Wallet is Ownable, AutomationCompatibleInterface, IWallet {
 			stableAsset.transferFrom(msg.sender, address(this), amount),
 			"Transfer failed"
 		);
+		emit Deposited(address(stableAsset), amount);
 		transactions.push(
 			Transaction(TransactionType.Withdrawal, amount, block.timestamp)
 		);
@@ -85,10 +86,25 @@ contract Wallet is Ownable, AutomationCompatibleInterface, IWallet {
 			"Insufficient balance"
 		);
 		require(stableAsset.transfer(msg.sender, amount), "Transfer failed");
+		emit Withdrawn(address(stableAsset), amount);
+
 		transactions.push(
 			Transaction(TransactionType.Deposit, amount, block.timestamp)
 		);
 		totalWithdrawn += amount;
+	}
+
+	// TODO, add event, this will give incorrect graph plot of earnings
+	function withdrawToken(address token, uint256 amount) public onlyOwner {
+		require(
+			IERC20Metadata(token).balanceOf(address(this)) >= amount,
+			"Insufficient balance"
+		);
+		require(
+			IERC20Metadata(token).transfer(msg.sender, amount),
+			"Transfer failed"
+		);
+		emit Withdrawn(token, amount);
 	}
 
 	function pause() external onlyOwner {}
