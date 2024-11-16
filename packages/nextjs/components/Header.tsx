@@ -53,7 +53,7 @@ const HeaderMenuLinks = ({ onLinkClick }: { onLinkClick?: () => void }) => {
                 onClick={onLinkClick}
                 className={`${
                   isActive ? "bg-secondary shadow-md" : ""
-                } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-2 px-4 text-base lg:text-sm rounded-full gap-3 grid grid-flow-col items-center`}
+                } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-2 px-4 text-base lg:text-sm rounded-xl gap-3 grid grid-flow-col items-center`}
               >
                 {icon}
                 <span>{label}</span>
@@ -119,7 +119,7 @@ export const Header = () => {
           </Link>
 
           <button
-            className="btn btn-ghost p-0 flex items-center justify-center w-10 h-10"
+            className="btn btn-ghost rounded-xl p-0 flex items-center justify-center w-10 h-10"
             onClick={() => setIsDrawerOpen(prev => !prev)}
           >
             {isDrawerOpen ? (
@@ -136,7 +136,7 @@ export const Header = () => {
         <div className="lg:hidden fixed inset-0 bg-base-100 z-50" ref={menuRef}>
           <div className="flex flex-col h-full">
             <div className="flex justify-end p-4">
-              <button className="btn btn-ghost p-0 flex items-center justify-center w-10 h-10" onClick={handleClose}>
+              <button className="btn rounded-xl btn-ghost p-0 flex items-center justify-center w-10 h-10" onClick={handleClose}>
                 <XMarkIcon className="h-6 w-6 pointer-events-none" />
               </button>
             </div>

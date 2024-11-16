@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 import { useAccount } from "wagmi";
 import { useWriteContract } from "wagmi";
 import { PlusIcon, WalletIcon } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
+import { Address, IntegerInput } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 interface StrategyModalProps {
@@ -17,8 +17,9 @@ interface StrategyModalProps {
 
 const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
   const [selectedStrategy, setSelectedStrategy] = useState("dca");
-  const [amount, setAmount] = useState("");
+  const [amount] = useState("");
   const [interval, setInterval] = useState("");
+  const [approveAmount, setApproveAmount] = useState(BigInt(0));
   const { writeContractAsync: writeFactoryContractAsync, isPending } = useScaffoldWriteContract("factory");
 
   // const { writeContractAsync: writeWalletContractAsync, isWalletPending } = useScaffoldWriteContract({contractName:"wallet",});
@@ -129,15 +130,10 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
               <>
                 <div>
                   <label className="label">2. Allocate Funds (USDC)</label>
-                  <input
-                    type="number"
-                    step="1"
-                    min="0"
-                    className="input input-bordered w-full"
-                    value={amount}
-                    onChange={e => setAmount(e.target.value)}
-                    required
-                    disabled={isPending}
+                  <IntegerInput
+                    value={approveAmount.toString()}
+                    onChange={updatedTxValue => setApproveAmount(BigInt(updatedTxValue))}
+                    placeholder="Amount"
                   />
                 </div>
                 <div>
@@ -222,7 +218,7 @@ const Dashboard: NextPage = () => {
         <h1 className="text-3xl font-bold">Your Strategies</h1>
         <button
           disabled={isWalletExist}
-          className="btn btn-primary w-full sm:w-auto"
+          className="btn btn-primary rounded-xl w-full sm:w-auto"
           onClick={() => setIsModalOpen(true)}
         >
           <PlusIcon className="h-5 w-5" />
@@ -241,15 +237,15 @@ const Dashboard: NextPage = () => {
               {/* Portfolio Stats Section */}
               <div className="bg-base-100 rounded-xl p-6 shadow-lg">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-base-200 rounded-full p-6 text-center">
+                  <div className="bg-base-200 rounded-xl p-6 text-center">
                     <h3 className="text-lg text-base-content/60 mb-2">Portfolio Value</h3>
                     <p className="text-2xl font-bold">$10,000.00</p>
                   </div>
-                  <div className="bg-base-200 rounded-full p-6 text-center">
+                  <div className="bg-base-200 rounded-xl p-6 text-center">
                     <h3 className="text-lg text-base-content/60 mb-2">Return on Investment</h3>
                     <p className="text-2xl font-bold text-success">+15.5%</p>
                   </div>
-                  <div className="bg-base-200 rounded-full p-6 text-center">
+                  <div className="bg-base-200 rounded-xl p-6 text-center">
                     <h3 className="text-lg text-base-content/60 mb-2">Your Assets</h3>
                     <div className="space-y-2">
                       <p className="font-medium">
