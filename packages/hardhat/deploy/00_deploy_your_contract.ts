@@ -8,7 +8,7 @@ const LOCAL_ADDRESSES = {
   wbtc: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
   usdcusd_feed: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
   btcusd_feed: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-  swaps_router: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
+  swaps_router: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
 };
 
 const deployFactory: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
@@ -24,13 +24,7 @@ const deployFactory: DeployFunction = async function (hre: HardhatRuntimeEnviron
 
   const factory = await deploy("Factory", {
     from: deployer,
-    args: [
-      addresses.usdc,
-      addresses.wbtc,
-      addresses.usdcusd_feed,
-      addresses.btcusd_feed,
-      addresses.swaps_router,
-    ],
+    args: [addresses.usdc, addresses.wbtc, addresses.usdcusd_feed, addresses.btcusd_feed, addresses.swaps_router],
     log: true,
     autoMine: true,
   });
@@ -50,7 +44,7 @@ const deployFactory: DeployFunction = async function (hre: HardhatRuntimeEnviron
   if (network.name !== "localhost") {
     console.log("🔍 Verification command:");
     console.log(
-      `npx hardhat verify --network ${network.name} ${factory.address} ${addresses.usdc} ${addresses.wbtc} ${addresses.usdcusd_feed} ${addresses.btcusd_feed} ${addresses.swaps_router}`
+      `npx hardhat verify --network ${network.name} ${factory.address} ${addresses.usdc} ${addresses.wbtc} ${addresses.usdcusd_feed} ${addresses.btcusd_feed} ${addresses.swaps_router}`,
     );
   }
 };
