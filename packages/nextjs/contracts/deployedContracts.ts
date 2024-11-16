@@ -967,7 +967,7 @@ const deployedContracts = {
       ],
     },
     wallet: {
-      address:"",
+      address: "",
       abi: [
         {
           inputs: [

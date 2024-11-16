@@ -13,7 +13,7 @@ import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 const HeaderMenuLinks = ({ onLinkClick }: { onLinkClick?: () => void }) => {
   const pathname = usePathname();
   const { address } = useAccount();
-  
+
   const { data: userWallets } = useScaffoldReadContract({
     contractName: "factory",
     functionName: "getWalletsByUser",
@@ -30,7 +30,7 @@ const HeaderMenuLinks = ({ onLinkClick }: { onLinkClick?: () => void }) => {
     ...(userWallets && Array.isArray(userWallets) && userWallets.length > 0
       ? [
           {
-            label: "Dollar Cost Average",
+            label: "Pure DCA",
             href: "/dca",
             icon: <Squares2X2Icon className="h-4 w-4" />,
             requiresConnection: true,

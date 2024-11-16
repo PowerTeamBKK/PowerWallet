@@ -43,25 +43,47 @@ const DollarCostAverage: NextPage = () => {
   const firstWallet = userWallets[0];
 
   return (
-    <div className="flex flex-col items-center min-h-screen w-full mt-16 lg:mt-0">
-      <div className="w-full max-w-7xl mx-auto px-4 lg:px-8 py-8">
-        {/* Oval Header */}
-        <div className="bg-base-100 rounded-full shadow-lg p-6 mb-8 flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Dollar Cost Average</h1>
-          <div className="flex items-center gap-2">
-            <WalletIcon className="h-5 w-5" />
-            <Address address={connectedAddress} size="lg" />
+    <div className="max-w-1xl mx-auto p-4 mt-16 lg:mt-2">
+      {/* Oval Header */}
+      <div className="bg-base-100 rounded-xl shadow-lg p-6 mb-8 flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Dollar Cost Average</h1>
+        <div className="flex items-center gap-2">
+          <WalletIcon className="h-5 w-5" />
+          <Address address={connectedAddress} />
+        </div>
+      </div>
+
+      {/* Strategy Details */}
+      <div className="bg-base-100 rounded-xl p-6 shadow-lg">
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <span className="text-base-content/100">Strategy Address</span>
+            <Address address={firstWallet} />
           </div>
         </div>
+      </div>
 
-        {/* Strategy Details */}
-        <div className="bg-base-100 rounded-xl p-6 shadow-lg">
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-base-content/60">Strategy Address</span>
-              <Address address={firstWallet} />
+      {/* Portfolio Stats Section */}
+      <div className="bg-base-100 rounded-xl p-6 shadow-lg mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-base-200 rounded-full p-6 text-center">
+            <h3 className="text-lg text-base-content/60 mb-2">Portfolio Value</h3>
+            <p className="text-2xl font-bold">$10,000.00</p>
+          </div>
+          <div className="bg-base-200 rounded-full p-6 text-center">
+            <h3 className="text-lg text-base-content/60 mb-2">Return on Investment</h3>
+            <p className="text-2xl font-bold text-success">+15.5%</p>
+          </div>
+          <div className="bg-base-200 rounded-full p-6 text-center">
+            <h3 className="text-lg text-base-content/60 mb-2">Your Assets</h3>
+            <div className="space-y-2">
+              <p className="font-medium">
+                <span className="text-base-content/60">USDC:</span> 5,000
+              </p>
+              <p className="font-medium">
+                <span className="text-base-content/60">cbBTC:</span> 0.15
+              </p>
             </div>
-            {/* Add more strategy details here once available */}
           </div>
         </div>
       </div>

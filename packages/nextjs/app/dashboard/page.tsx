@@ -1,18 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NextPage } from "next";
 import { toast } from "react-hot-toast";
 import { useAccount } from "wagmi";
+import { useWriteContract } from "wagmi";
 import { PlusIcon, WalletIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
-import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
-import { useWriteContract } from "wagmi";
 import DeployedContracts from "~~/contracts/deployedContracts";
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-
-
-
+import Image from "next/image";
 
 interface StrategyModalProps {
   isOpen: boolean;
@@ -25,9 +23,7 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
   const [interval, setInterval] = useState("");
   const { writeContractAsync: writeFactoryContractAsync, isPending } = useScaffoldWriteContract("factory");
 
-
   // const { writeContractAsync: writeWalletContractAsync, isWalletPending } = useScaffoldWriteContract({contractName:"wallet",});
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,12 +76,6 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
     }
   };
 
-
-
-
-
-
-
   // const withdrawUsdc = async (walletAddress,amount) => {
   //   writeWalletContractAsync({
   //     address: walletAddress,
@@ -96,27 +86,36 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
 
   // };
 
-
-
-
-
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-base-100 p-6 rounded-xl w-96" onClick={e => e.stopPropagation()}>
-        <h3 className="text-2xl font-bold mb-4">Create New Strategy</h3>
-        <form onSubmit={handleSubmit} className="space-y-4">
+       <div className="bg-base-100 p-2 rounded-xl max-w-4xl w-full mx-4 flex flex-col md:flex-row gap-6">
+    {/* Image container */}
+    <div className="w-full md:w-1/2 flex justify-center md:justify-start">
+      <Image
+        src="/SLAddStrat.jpg"
+        alt="Snow Leapard"
+        width={300}
+        height={300}
+        className="rounded-xl object-cover"
+      />
+    </div>
+    
+    {/* Form container */}
+    <div className="w-full md:w-1/2">
+      <h3 className="text-2xl font-bold mb-4">Create New Strategy</h3>
+      <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="label">Strategy Type</label>
+            <label className="label">1. Select Strategy</label>
             <select
               className="select select-bordered w-full"
               value={selectedStrategy}
               onChange={e => setSelectedStrategy(e.target.value)}
             >
-              <option value="dca">Dollar Cost Averaging</option>
-              <option value="powerLawLow">Power Law Low Risk</option>
-              <option value="powerLawHigh">Power Law High Risk</option>
+              <option value="dca">Pure DCA</option>
+              <option value="powerLawLow">Easy</option>
+              <option value="powerLawHigh">Bold</option>
             </select>
           </div>
 
@@ -131,7 +130,7 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
           {selectedStrategy === "dca" && (
             <>
               <div>
-                <label className="label">Amount (USDC)</label>
+                <label className="label">2. Allocate Funds (USDC)</label>
                 <input
                   type="number"
                   step="1"
@@ -144,7 +143,7 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
                 />
               </div>
               <div>
-                <label className="label">Interval (seconds)</label>
+                <label className="label">3. Select TimeFrame (seconds)</label>
                 <input
                   type="number"
                   min="1"
@@ -169,12 +168,12 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
         </form>
       </div>
     </div>
+    </div>
   );
 };
 
 const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
-
-  const { writeContractAsync: writeUSDCContractAsync, isUSDCPending } = useScaffoldWriteContract("usdc");
+  const { writeContractAsync: writeUSDCContractAsync } = useScaffoldWriteContract("usdc");
 
   const approveUsdc = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -193,16 +192,13 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
         onBlockConfirmation: txnReceipt => {
           console.log("📦 Transaction blockHash", txnReceipt.blockHash);
           toast.success("USDC approved!");
-
         },
       },
     );
-
   };
 
-  const { writeContractAsync: writeWalletContractAsync, isWalletPending } = useWriteContract();
+  const { writeContractAsync: writeWalletContractAsync } = useWriteContract();
   const writeTx = useTransactor();
-
 
   const depositUsdc = async () => {
     const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
@@ -215,13 +211,11 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
         args: [amount],
       });
 
-
     try {
       await writeTx(writeContractAsyncWithParams, { blockConfirmations: 1 });
     } catch (e) {
       console.log("Unexpected error in writeTx", e);
     }
-
   };
 
   const withdrawUsdc = async () => {
@@ -235,13 +229,11 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
         args: [amount],
       });
 
-
     try {
       await writeTx(writeContractAsyncWithParams, { blockConfirmations: 1 });
     } catch (e) {
       console.log("Unexpected error in writeTx", e);
     }
-
   };
 
   return (
@@ -274,7 +266,6 @@ const Dashboard: NextPage = () => {
 
   const [isWalletExist, setWalletExist] = useState(false);
 
-
   const { data: userWallets, isLoading } = useScaffoldReadContract({
     contractName: "factory",
     functionName: "getWalletsByUser",
@@ -289,8 +280,6 @@ const Dashboard: NextPage = () => {
     }
   }, [userWallets]);
 
-
-
   if (!connectedAddress) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -300,8 +289,9 @@ const Dashboard: NextPage = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 mt-16 lg:mt-0">
-      <div className="flex justify-between items-center mb-8">
+   <div className="max-w-1xl mx-auto p-4 mt-16 lg:mt-2">
+      {/* Oval Header */}
+      <div className="bg-base-100 rounded-xl shadow-lg p-6 mb-8 flex justify-between items-center">
         <h1 className="text-3xl font-bold">Your Strategies</h1>
         <button disabled={isWalletExist} className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
           <PlusIcon className="h-5 w-5" />
@@ -314,12 +304,39 @@ const Dashboard: NextPage = () => {
       ) : (
         <>
           {userWallets && Array.isArray(userWallets) && userWallets.length > 0 ? (
-            <WalletList wallets={userWallets as `0x${string}`[]} />
+            <>
+              {/* Wallet List */}
+              <WalletList wallets={userWallets as `0x${string}`[]} />
+
+              {/* Portfolio Stats Section */}
+              <div className="bg-base-100 rounded-xl p-6 shadow-lg mt-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-base-200 rounded-full p-6 text-center">
+                    <h3 className="text-lg text-base-content/60 mb-2">Portfolio Value</h3>
+                    <p className="text-2xl font-bold">$10,000.00</p>
+                  </div>
+                  <div className="bg-base-200 rounded-full p-6 text-center">
+                    <h3 className="text-lg text-base-content/60 mb-2">Return on Investment</h3>
+                    <p className="text-2xl font-bold text-success">+15.5%</p>
+                  </div>
+                  <div className="bg-base-200 rounded-full p-6 text-center">
+                    <h3 className="text-lg text-base-content/60 mb-2">Your Assets</h3>
+                    <div className="space-y-2">
+                      <p className="font-medium">
+                        <span className="text-base-content/60">USDC:</span> 5,000
+                      </p>
+                      <p className="font-medium">
+                        <span className="text-base-content/60">cbBTC:</span> 0.15
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
           ) : (
             <div className="text-center py-12">
               <p className="text-base-content/60 mb-4">No strategies found</p>
               <p className="text-sm">Create your first strategy to get started</p>
-
             </div>
           )}
         </>
