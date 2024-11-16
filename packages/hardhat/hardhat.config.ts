@@ -13,6 +13,9 @@ import "hardhat-deploy-ethers";
 // If not set, it uses the hardhat account 0 private key.
 const deployerPrivateKey =
   process.env.DEPLOYER_PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+
+const user1PrivateKey = process.env.USER1_PRIVATE_KEY ?? ""
+
 // If not set, it uses ours Etherscan default API key.
 const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
 // forking rpc url
@@ -33,7 +36,7 @@ const config: HardhatUserConfig = {
       },
     ],
   },
-  defaultNetwork: "localhost",
+  defaultNetwork: "hardhat",
   namedAccounts: {
     deployer: {
       // By default, it will take the first Hardhat account as the deployer
@@ -46,56 +49,9 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         url: forkingURL,
-        enabled: process.env.MAINNET_FORKING_ENABLED === "true",
+        blockNumber: 21175460 
       },
-    },
-    mainnet: {
-      url: `https://cloudflare-eth.com`,
-      accounts: [deployerPrivateKey],
-    },
-    sepolia: {
-      url: `https://rpc2.sepolia.org`,
-      accounts: [deployerPrivateKey],
-    },
-    arbitrum: {
-      url: `https://arb1.arbitrum.io/rpc`,
-      accounts: [deployerPrivateKey],
-    },
-    arbitrumSepolia: {
-      url: `https://sepolia-rollup.arbitrum.io/rpc`,
-      accounts: [deployerPrivateKey],
-    },
-    optimism: {
-      url: `https://mainnet.optimism.io`,
-      accounts: [deployerPrivateKey],
-    },
-    optimismSepolia: {
-      url: `https://sepolia.optimism.io`,
-      accounts: [deployerPrivateKey],
-    },
-    polygon: {
-      url: `https://polygon-rpc.com`,
-      accounts: [deployerPrivateKey],
-    },
-    polygonMumbai: {
-      url: `https://rpc.ankr.com/polygon_mumbai`,
-      accounts: [deployerPrivateKey],
-    },
-    polygonZkEvm: {
-      url: `https://zkevm-rpc.com`,
-      accounts: [deployerPrivateKey],
-    },
-    polygonZkEvmTestnet: {
-      url: `https://rpc.public.zkevm-test.net`,
-      accounts: [deployerPrivateKey],
-    },
-    gnosis: {
-      url: "https://rpc.gnosischain.com",
-      accounts: [deployerPrivateKey],
-    },
-    chiado: {
-      url: "https://rpc.chiadochain.net",
-      accounts: [deployerPrivateKey],
+      accounts: { accountsBalance: "100000000000000000000" }
     },
     base: {
       url: "https://mainnet.base.org",
@@ -103,28 +59,25 @@ const config: HardhatUserConfig = {
     },
     baseSepolia: {
       url: "https://sepolia.base.org",
-      accounts: [deployerPrivateKey],
-    },
-    scrollSepolia: {
-      url: "https://sepolia-rpc.scroll.io",
-      accounts: [deployerPrivateKey],
-    },
-    scroll: {
-      url: "https://rpc.scroll.io",
-      accounts: [deployerPrivateKey],
-    },
-    pgn: {
-      url: "https://rpc.publicgoods.network",
-      accounts: [deployerPrivateKey],
-    },
-    pgnTestnet: {
-      url: "https://sepolia.publicgoods.network",
-      accounts: [deployerPrivateKey],
+      accounts: [deployerPrivateKey, user1PrivateKey],
     },
   },
   // configuration for harhdat-verify plugin
   etherscan: {
-    apiKey: `${etherscanApiKey}`,
+    apiKey: {
+      // Is not required by blockscout. Can be any non-empty string
+      'baseSepolia': `${etherscanApiKey}`
+    },
+    customChains: [
+      {
+        network: "baseSepolia",
+        chainId: 84532,
+        urls: {
+          apiURL: "https://base-sepolia.blockscout.com/api",
+          browserURL: "https://base-sepolia.blockscout.com/",
+        }
+      }
+    ]
   },
   // configuration for etherscan-verify from hardhat-deploy plugin
   verify: {
