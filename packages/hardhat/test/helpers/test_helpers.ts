@@ -31,9 +31,13 @@ export const deployFactoryContract = async () => {
 
     // deploy swaps router contract
     const SwapsRouter = await ethers.getContractFactory("SwapsRouter");
+   
     const swapsRouter = await SwapsRouter.deploy(
         uniswapV3QuoterAddress,
-        uniswapV3RouterAddress
+        uniswapV3RouterAddress,
+        {
+            maxFeePerGas: 41270515044,
+        }
     )
 
     // deploy factory contract
@@ -43,24 +47,31 @@ export const deployFactoryContract = async () => {
         wbtc.address,
         stableAssetFeed.address,
         riskAssetFeed.address,
-        swapsRouter.address
+        swapsRouter.address,
+        {
+            maxFeePerGas: 41270515044,
+        }
     )
 
-    // fund user0 and user1 with USDC
-    await transferFunds(user0, owner.address)
-    await fundAccount(1000 * USDC, user0.address)
+    // // fund user0 and user1 with USDC
+    // await transferFunds(user0, owner.address)
+    // await fundAccount(1000 * USDC, user0.address)
 
-    await transferFunds(user1, owner.address)
-    await fundAccount(1000 * USDC, user1.address)
+    // await transferFunds(user1, owner.address)
+    // await fundAccount(1000 * USDC, user1.address)
 
-    return { factoryContract, usdc, wbtc, stableAssetFeed, riskAssetFeed, owner, user0, user1 };
+    // return { factoryContract, usdc, wbtc, stableAssetFeed, riskAssetFeed, owner, user0, user1 };
+    return { usdc, wbtc, stableAssetFeed, riskAssetFeed, owner, user0, user1 };
 }
 
 
 export const deployAccumulationStrategyContract = async () => {
     const [ owner, user0 ] = await ethers.getSigners();
     const AccumulationOnly = await ethers.getContractFactory("AccumulationOnly");
-    const accumulationStrategy = await AccumulationOnly.deploy();
+  
+    const accumulationStrategy = await AccumulationOnly.deploy({
+        maxFeePerGas: 41270515044,
+    });
 
     return { accumulationStrategy, owner, user0 };
 }

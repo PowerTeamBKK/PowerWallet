@@ -49,7 +49,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         url: forkingURL,
-        blockNumber: 21175460 
+        blockNumber: 21175460,
       },
       accounts: { accountsBalance: "100000000000000000000" }
     },
