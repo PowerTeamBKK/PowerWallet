@@ -23,7 +23,7 @@ let uniswapV3RouterAddress = addresses["uniswap_v3_router"];
 export const deployFactoryContract = async () => {
 
     const [ owner, user0, user1 ] = await ethers.getSigners();
-
+    
     const usdc = new Contract(usdcAddress, erc20_abi, ethers.provider)
     const wbtc = new Contract(wbtcAddress, erc20_abi, ethers.provider)
     const stableAssetFeed = new Contract(usdcUsdFeedAddress, pricefeed_abi, ethers.provider)
@@ -43,25 +43,24 @@ export const deployFactoryContract = async () => {
     // deploy factory contract
     const Factory = await ethers.getContractFactory("Factory");
     const factoryContract = await Factory.deploy(
-        usdc.address,
-        wbtc.address,
-        stableAssetFeed.address,
-        riskAssetFeed.address,
-        swapsRouter.address,
+        usdc.target,
+        wbtc.target,
+        stableAssetFeed.target,
+        riskAssetFeed.target,
+        swapsRouter.target,
         {
             maxFeePerGas: 41270515044,
         }
     )
 
-    // // fund user0 and user1 with USDC
-    // await transferFunds(user0, owner.address)
-    // await fundAccount(1000 * USDC, user0.address)
+    // fund user0 and user1 with USDC
+    await transferFunds(user0, owner.address)
+    await fundAccount(1000 * USDC, user0.address)
 
-    // await transferFunds(user1, owner.address)
-    // await fundAccount(1000 * USDC, user1.address)
+    await transferFunds(user1, owner.address)
+    await fundAccount(1000 * USDC, user1.address)
 
-    // return { factoryContract, usdc, wbtc, stableAssetFeed, riskAssetFeed, owner, user0, user1 };
-    return { usdc, wbtc, stableAssetFeed, riskAssetFeed, owner, user0, user1 };
+    return { factoryContract, usdc, wbtc, stableAssetFeed, riskAssetFeed, owner, user0, user1 };
 }
 
 
