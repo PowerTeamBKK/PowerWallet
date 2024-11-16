@@ -16,6 +16,7 @@ export const Footer = () => {
   const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrency.price);
   const { targetNetwork } = useTargetNetwork();
   const isLocalNetwork = targetNetwork.id === hardhat.id;
+  const currentYear = new Date().getFullYear();
 
   return (
     <div className="min-h-0 py-5 px-1 mb-11 lg:mb-0">
@@ -71,6 +72,11 @@ export const Footer = () => {
               <a href="https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA" target="_blank" rel="noreferrer" className="link">
                 Support
               </a>
+            </div>
+          </div>
+          <div className="flex justify-center items-center gap-2 mt-2 text-sm w-full">
+            <div className="text-center">
+              <p className="m-0">© Power Wallet {currentYear}. All Rights Reserved.</p>
             </div>
           </div>
         </ul>

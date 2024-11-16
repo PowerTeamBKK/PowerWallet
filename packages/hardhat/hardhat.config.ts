@@ -14,12 +14,12 @@ import "hardhat-deploy-ethers";
 const deployerPrivateKey =
   process.env.DEPLOYER_PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 
-const user1PrivateKey = process.env.USER1_PRIVATE_KEY ?? ""
+// const user1PrivateKey = process.env.USER1_PRIVATE_KEY ?? ""
 
 // If not set, it uses ours Etherscan default API key.
 const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
 // forking rpc url
-const forkingURL = process.env.FORKING_URL || "";
+// const forkingURL = process.env.FORKING_URL || "";
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -43,30 +43,40 @@ const config: HardhatUserConfig = {
       default: 0,
     },
   },
+  // Add these network configurations to your hardhat.config.ts
   networks: {
-    // View the networks that are pre-configured.
-    // If the network you are looking for is not here you can add new network settings
+    localhost: {
+      url: "http://127.0.0.1:8545",
+      chainId: 31337,
+    },
     hardhat: {
       forking: {
-        url: forkingURL,
+        url: process.env.FORKING_URL || "https://eth-mainnet.g.alchemy.com/v2/YOUR-API-KEY",
         blockNumber: 21175460,
+        enabled: true,
       },
-      accounts: { accountsBalance: "100000000000000000000" }
-    },
-    base: {
-      url: "https://mainnet.base.org",
-      accounts: [deployerPrivateKey],
+      chainId: 31337,
+      accounts: {
+        accountsBalance: "100000000000000000000",
+        count: 10,
+      },
     },
     baseSepolia: {
       url: "https://sepolia.base.org",
-      accounts: [deployerPrivateKey, user1PrivateKey],
+      accounts: [deployerPrivateKey],
+      chainId: 84532,
+      verify: {
+        etherscan: {
+          apiKey: etherscanApiKey,
+        },
+      },
     },
   },
   // configuration for harhdat-verify plugin
   etherscan: {
     apiKey: {
       // Is not required by blockscout. Can be any non-empty string
-      'baseSepolia': `${etherscanApiKey}`
+      baseSepolia: `${etherscanApiKey}`,
     },
     customChains: [
       {
@@ -75,9 +85,9 @@ const config: HardhatUserConfig = {
         urls: {
           apiURL: "https://base-sepolia.blockscout.com/api",
           browserURL: "https://base-sepolia.blockscout.com/",
-        }
-      }
-    ]
+        },
+      },
+    ],
   },
   // configuration for etherscan-verify from hardhat-deploy plugin
   verify: {
