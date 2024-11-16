@@ -16,7 +16,7 @@ describe("Factory Contract", function () {
     const { factoryContract, usdc, wbtc, stableAssetFeed, riskAssetFeed, user0, user1 } = await loadFixture(deployFactoryContract);
 
     let factory = factoryContract as Factory;
-    await factory.connect(user0).newWalletDCA();
+    await factory.connect(user0).newWalletDCA(100, 24 * 60 * 60);
     let wallets = await factory.getWalletsByUser(user0.address);
     expect(wallets.length).to.equal(1);
   });

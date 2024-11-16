@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import { IWallet } from "../Wallet.sol";
 
-import "hardhat/console.sol";
 import "../lib/TokenMaths.sol";
 
 import { IStrategy, StrategyAction } from "./IStrategy.sol";
@@ -71,14 +70,13 @@ contract PowerLawHigh is IStrategy, Ownable {
 
     function eval() public view returns (StrategyAction action, uint amountIn) {
 
-        // update the moving average
         int128 modelPrice = currentPowerLawPrice();
 
         ( , int price0, , , ) = stableAssetFeed.latestRoundData();
         ( , int price1, , , ) = riskAssetFeed.latestRoundData();
 
-        int deltaPricePerc = int(PERCENT_SCALE) * (price0 - int(modelPrice)) / int(modelPrice);
-        
+        int deltaPricePerc = int(PERCENT_SCALE) * (price1 - int(modelPrice)) / int(modelPrice);
+
         // should sell when price is 100% above the power law trend
         uint targetPricePercUpPercent = higherBandPerc * PERCENT_SCALE / 100;
         bool shouldSell = deltaPricePerc > 0 && uint(deltaPricePerc) >= targetPricePercUpPercent;
@@ -105,7 +103,7 @@ contract PowerLawHigh is IStrategy, Ownable {
                 stableAsset.decimals(), stableAssetFeed.decimals(), stableAsset.decimals()
             ) / 100;
 
-            if ( stableAsset.balanceOf(address(wallet)) < amountIn) {
+            if (stableAsset.balanceOf(address(wallet)) < amountIn) {
                 return (StrategyAction.NONE, 0);
             }
         }
@@ -148,6 +146,7 @@ contract PowerLawHigh is IStrategy, Ownable {
 
         uint256 modelPrice = powerValue / 1e17; // Divide by 1e17 to get the final result
 
-        return int128(uint128(modelPrice));
+        uint256 scaledPrice =  modelPrice * (10 ** riskAsset.decimals());
+        return int128(uint128(scaledPrice));
     }
 }
