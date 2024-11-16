@@ -73,19 +73,49 @@ contract Factory is Ownable {
 			riskAssetFeed
 		);
 
-        newWallet.setStrategy(address(strategy));
-        
-        newWallet.transferOwnership(msg.sender);
-        strategy.transferOwnership(msg.sender);
+		newWallet.setStrategy(address(strategy));
 
-        if (!users[msg.sender]) {
-           users[msg.sender] = true;
-           userAddresses.push(msg.sender);
-        }
+		newWallet.transferOwnership(msg.sender);
+		strategy.transferOwnership(msg.sender);
 
-        userWallets[msg.sender].push(address(newWallet));
+		if (!users[msg.sender]) {
+			users[msg.sender] = true;
+			userAddresses.push(msg.sender);
+		}
 
-        emit WalletCreated(msg.sender, address(newWallet));
+		userWallets[msg.sender].push(address(newWallet));
+
+		emit WalletCreated(msg.sender, address(newWallet));
+	}
+
+	function createWallet() public {
+		Wallet newWallet = new Wallet(
+			stableAsset,
+			riskAsset,
+			stableAssetFeed,
+			riskAssetFeed,
+			swapRouter
+		);
+
+		PowerLaw strategy = new PowerLaw(
+			address(newWallet),
+			stableAsset,
+			riskAsset,
+			stableAssetFeed,
+			riskAssetFeed
+		);
+
+		newWallet.setStrategy(address(strategy));
+		newWallet.transferOwnership(msg.sender);
+
+		if (!users[msg.sender]) {
+			users[msg.sender] = true;
+			userAddresses.push(msg.sender);
+		}
+
+		userWallets[msg.sender].push(address(newWallet));
+
+		emit WalletCreated(msg.sender, address(newWallet));
 	}
 
 	// Function to get all wallet addresses for a given user
