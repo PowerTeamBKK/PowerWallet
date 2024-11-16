@@ -94,7 +94,7 @@ const DollarCostAverage: NextPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-base-200 rounded-full p-6 text-center">
             <h3 className="text-lg text-base-content/60 mb-2">Portfolio Value</h3>
-            <p className="text-2xl font-bold">${displayedBalance} USDC</p>
+            <p className="text-2xl font-bold">${displayedBalance} </p>
           </div>
           <div className="bg-base-200 rounded-full p-6 text-center">
             <h3 className="text-lg text-base-content/60 mb-2">Return on Investment</h3>
@@ -104,7 +104,7 @@ const DollarCostAverage: NextPage = () => {
             <h3 className="text-lg text-base-content/60 mb-2">Your Assets</h3>
             <div className="space-y-2">
               <p className="font-medium">
-                <span className="text-base-content/60">USDC:</span> 5,000
+                <span className="text-base-content/60">USDC:</span> ${displayedBalance}
               </p>
               <p className="font-medium">
                 <span className="text-base-content/60">cbBTC:</span> 0.15
