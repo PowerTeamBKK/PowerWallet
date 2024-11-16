@@ -5,8 +5,8 @@ import addresses_json from "../conf/addresses.json";
 
 type NetworkAddresses = typeof addresses_json;
 
-// Factory contract deployed to: 0x17bCEf39A8212494240c2dff94886fCeb5723B0E
-// https://base-sepolia.blockscout.com/address/0xE0087A5EcAaF884894946191eb9d5FD0841D95Ec#code
+// Factory contract deployed to: 0x77C5deDdcFDe2f165306e1b6d2F834D8F5d4c1f0
+// https://base-sepolia.blockscout.com/address/0x77C5deDdcFDe2f165306e1b6d2F834D8F5d4c1f0#code
 
 async function main() {
   const [deployer] = await ethers.getSigners();
