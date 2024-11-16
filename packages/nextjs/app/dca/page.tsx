@@ -4,12 +4,12 @@ import { useState } from "react";
 import { NextPage } from "next";
 import toast from "react-hot-toast";
 import { useAccount } from "wagmi";
-import { useWriteContract } from "wagmi";
 import { PlusIcon, WalletIcon } from "@heroicons/react/24/outline";
 import { Address, IntegerInput } from "~~/components/scaffold-eth";
 import DeployedContracts from "~~/contracts/deployedContracts";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { useReadContract, useWriteContract } from "wagmi";
 
 const DollarCostAverage: NextPage = () => {
   const { address: connectedAddress } = useAccount();
@@ -102,8 +102,21 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
   const { writeContractAsync: writeUSDCContractAsync } = useScaffoldWriteContract("usdc");
   const { address: connectedAddress } = useAccount();
   const [approveAmount, setApproveAmount] = useState<string | bigint>("");
-
   const firstWallet = wallets[0];
+  const { isPaused } = useReadContract({
+    address: firstWallet,
+    functionName: "isPaused",
+    abi: DeployedContracts[84532].wallet.abi,
+    args: [],
+    chainId: 84532,
+    query: {
+      enabled: false,
+      retry: false,
+    },
+  });
+
+  console.log(">>> readContractHookRes", firstWallet, isPaused  )
+
 
   const approveUsdc = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,34 +143,26 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
 
   const pauseWallet = async (e: React.FormEvent) => {
     e.preventDefault();
+    const walletAddress = wallets[0];
+    await writeWalletContractAsync({
+      address: walletAddress,
+      abi: DeployedContracts[84532].wallet.abi,
+      functionName: "pause",
+      args: [],
+    });
 
-    await writeUSDCContractAsync(
-      {
-        functionName: "pause",
-      },
-      {
-        onBlockConfirmation: txnReceipt => {
-          console.log("📦 Transaction blockHash", txnReceipt.blockHash);
-          toast.success("Paused!");
-        },
-      },
-    );
   };
 
   const unpauseWallet = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await writeUSDCContractAsync(
-      {
-        functionName: "unpause",
-      },
-      {
-        onBlockConfirmation: txnReceipt => {
-          console.log("📦 Transaction blockHash", txnReceipt.blockHash);
-          toast.success("Unpaused!");
-        },
-      },
-    );
+    const walletAddress = wallets[0];
+    await writeWalletContractAsync({
+      address: walletAddress,
+      abi: DeployedContracts[84532].wallet.abi,
+      functionName: "unpause",
+      args: [],
+    });
   };
 
   const depositUsdc = async () => {
@@ -235,15 +240,19 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
                 Withdraw
               </button>
 
-              <button className="btn rounded-xl btn-primary btn-sm" onClick={pauseWallet}>
-                <PlusIcon className="h-4 w-4" />
-                Pause
-              </button>
+              { !isPaused && 
+                <button className="btn btn-primary btn-sm" onClick={pauseWallet}>
+                  <PlusIcon className="h-4 w-4" />
+                  Pause
+                </button>
+              }
 
-              <button className="btn rounded-xl btn-primary btn-sm" onClick={unpauseWallet}>
-                <PlusIcon className="h-4 w-4" />
-                Unpause
-              </button>
+              { isPaused && 
+                <button className="btn btn-primary btn-sm" onClick={unpauseWallet}>
+                  <PlusIcon className="h-4 w-4" />
+                  Unpause
+                </button>
+              }
             </div>
           </div>
         </div>
