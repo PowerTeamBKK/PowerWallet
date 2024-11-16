@@ -23,7 +23,7 @@ let uniswapV3RouterAddress = addresses["uniswap_v3_router"];
 export const deployFactoryContract = async () => {
 
     const [ owner, user0, user1 ] = await ethers.getSigners();
-    
+
     const usdc = new Contract(usdcAddress, erc20_abi, ethers.provider)
     const wbtc = new Contract(wbtcAddress, erc20_abi, ethers.provider)
     const stableAssetFeed = new Contract(usdcUsdFeedAddress, pricefeed_abi, ethers.provider)
@@ -79,7 +79,7 @@ export const deployAccumulationStrategyContract = async () => {
 async function transferFunds(user: SignerWithAddress, owner: string) {
     const usdc = new Contract(usdcAddress, erc20_abi, ethers.provider)
     const balance = await usdc.balanceOf(user.address);
-    if (balance.gt(0)) {
+    if (balance > 0) {
       const tx = await usdc.connect(user).transfer(owner, balance);
       await tx.wait();
     }
@@ -98,7 +98,7 @@ async function fundAccount(amount: number, recipient: string) {
     // Set recipient's balance to 1 ETH 
     await network.provider.send("hardhat_setBalance", [
         signer.address,
-        ethers.utils.parseUnits("1", "ether").toHexString(),
+        "0xDE0B6B3A7640000", // 1 ETH 
     ]);
 
     await usdc.connect(signer).transfer(recipient, amount)
