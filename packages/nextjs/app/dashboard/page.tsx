@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { toast } from "react-hot-toast";
 import { useAccount } from "wagmi";
@@ -272,11 +272,24 @@ const Dashboard: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { address: connectedAddress } = useAccount();
 
+  const [isWalletExist, setWalletExist] = useState(false);
+
+
   const { data: userWallets, isLoading } = useScaffoldReadContract({
     contractName: "factory",
     functionName: "getWalletsByUser",
     args: [connectedAddress],
   });
+
+  useEffect(() => {
+    if (userWallets && userWallets.length > 0) {
+      setWalletExist(true);
+    } else {
+      setWalletExist(false);
+    }
+  }, [userWallets]);
+
+
 
   if (!connectedAddress) {
     return (
@@ -290,7 +303,7 @@ const Dashboard: NextPage = () => {
     <div className="max-w-2xl mx-auto p-6 mt-16 lg:mt-0">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Your Strategies</h1>
-        <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
+        <button disabled={isWalletExist} className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
           <PlusIcon className="h-5 w-5" />
           Add New Strategy
         </button>
