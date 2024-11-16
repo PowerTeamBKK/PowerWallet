@@ -11,7 +11,7 @@ export const Footer = () => {
 
   return (
     <div className="min-h-0 py-5 px-1 mb-11 lg:mb-0">
-      <div>
+      <div className="max-w-2xl mx-auto">
         <div className="fixed flex justify-between items-center w-full lg:w-[calc(100%-16rem)] z-10 p-4 bottom-0 right-0 pointer-events-none">
           <div className="flex flex-col md:flex-row gap-2 pointer-events-auto">
             {isLocalNetwork && (
@@ -23,7 +23,7 @@ export const Footer = () => {
           <SwitchTheme className={`pointer-events-auto ${isLocalNetwork ? "self-end md:self-auto" : ""}`} />
         </div>
       </div>
-      <div className="w-full lg:w-[calc(100%-16rem)] lg:ml-auto">
+      <div className="max-w-2xl mx-auto">
         <ul className="menu menu-horizontal w-full">
           <div className="flex justify-center items-center gap-2 text-sm w-full">
             <div className="text-center">

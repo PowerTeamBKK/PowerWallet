@@ -67,12 +67,12 @@ const DollarCostAverage: NextPage = () => {
       <div className="bg-base-100 rounded-xl p-6 shadow-lg mt-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-base-200 rounded-full p-6 text-center">
-            <h3 className="text-lg text-base-content/60 mb-2">Portfolio Value</h3>
-            <p className="text-2xl font-bold">$10,000.00</p>
+            <h3 className="text-lg text-base-content/60 mb-2">Pure DCA Value</h3>
+            <p className="text-2xl font-bold">$6,000.00</p>
           </div>
           <div className="bg-base-200 rounded-full p-6 text-center">
             <h3 className="text-lg text-base-content/60 mb-2">Return on Investment</h3>
-            <p className="text-2xl font-bold text-success">+15.5%</p>
+            <p className="text-2xl font-bold text-success">+6.5%</p>
           </div>
           <div className="bg-base-200 rounded-full p-6 text-center">
             <h3 className="text-lg text-base-content/60 mb-2">Your Assets</h3>
@@ -81,7 +81,7 @@ const DollarCostAverage: NextPage = () => {
                 <span className="text-base-content/60">USDC:</span> 5,000
               </p>
               <p className="font-medium">
-                <span className="text-base-content/60">cbBTC:</span> 0.15
+                <span className="text-base-content/60">cbBTC:</span> 0.001
               </p>
             </div>
           </div>

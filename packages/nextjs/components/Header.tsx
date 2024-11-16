@@ -86,11 +86,10 @@ export const Header = () => {
       <div className="hidden lg:flex fixed left-0 h-screen w-64 bg-base-100 shadow-lg flex-col">
         <div className="flex flex-col h-full">
           <Link href="/" className="flex items-center gap-2 p-4 border-b border-base-300">
-            <div className="relative w-10 h-10">
-              <Image alt="Logo" className="cursor-pointer" fill src="/logo.svg" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-lg">Power Wallet</span>
+            <div className="relative w-44 h-12">
+              {" "}
+              {/* Fixed dimensions */}
+              <Image alt="Logo" className="cursor-pointer object-contain" src="/logo.svg" fill priority />
             </div>
           </Link>
 
@@ -112,10 +111,11 @@ export const Header = () => {
       <div className="lg:hidden fixed top-0 left-0 right-0 bg-base-100 shadow-lg z-40">
         <div className="flex justify-between items-center p-4">
           <Link href="/" className="flex items-center gap-2">
-            <div className="relative w-8 h-8">
-              <Image alt="Logo" className="cursor-pointer" fill src="/logo.svg" />
+            <div className="relative w-36 h-8">
+              {" "}
+              {/* Smaller for mobile */}
+              <Image alt="Logo" className="cursor-pointer object-contain" src="/logo.svg" fill priority />
             </div>
-            <span className="font-bold text-lg">Power Wallet</span>
           </Link>
 
           <button
