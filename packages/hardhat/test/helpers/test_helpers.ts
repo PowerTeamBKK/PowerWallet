@@ -68,9 +68,11 @@ export const deployAccumulationStrategyContract = async () => {
     const [ owner, user0 ] = await ethers.getSigners();
     const AccumulationOnly = await ethers.getContractFactory("AccumulationOnly");
   
+    
     const accumulationStrategy = await AccumulationOnly.deploy({
         maxFeePerGas: 41270515044,
     });
+    
 
     return { accumulationStrategy, owner, user0 };
 }

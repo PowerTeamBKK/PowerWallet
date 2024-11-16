@@ -13,7 +13,7 @@ import { TokenMaths } from "./utils/TokenMaths.sol";
 
 interface IWallet {}
 
-import { StrategyAction } from "./strategies/PowerLaw.sol";
+import { StrategyAction } from "./strategies/IStrategy.sol";
 
 enum TransactionType {
 	Deposit,
