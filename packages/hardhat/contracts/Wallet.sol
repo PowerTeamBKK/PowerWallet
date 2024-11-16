@@ -11,7 +11,11 @@ import { IStrategy } from "./strategies/IStrategy.sol";
 import { ISwapsRouter } from "./swaps/ISwapsRouter.sol";
 import { TokenMaths } from "./utils/TokenMaths.sol";
 
-interface IWallet {}
+interface IWallet {
+    function totalValue() external view returns (uint);
+    function stableAssetValue() external view returns (uint);
+    function riskAssetValue() external view returns (uint);
+}
 
 import { StrategyAction } from "./strategies/IStrategy.sol";
 
