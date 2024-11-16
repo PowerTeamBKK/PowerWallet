@@ -131,15 +131,13 @@ export const deployWalletContract = async () => {
       maxFeePerGas: 41270515044,
     },
   );
-  console.log("-----")
-  // fund user0 and user1 with USDC
+   // fund user0 and user1 with USDC
   await transferFunds(user0, owner.address);
   await fundAccount(1000 * USDC, user0.address);
 
   await transferFunds(user1, owner.address);
   await fundAccount(1000 * USDC, user1.address);
-  console.log("----fac-")
-
+ 
   await factoryContract.connect(user0).createWallet();
 
   const wallets = await factoryContract.getWalletsByUser(user0.address);
