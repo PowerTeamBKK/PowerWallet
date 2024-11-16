@@ -21,7 +21,7 @@ contract AccumulationOnly is IStrategy, Ownable
   
     //// IStrategy Interface //// 
     
-    function name() external view returns (string) {
+    function name() external view returns (string memory) {
         return "DCA";
     }
 

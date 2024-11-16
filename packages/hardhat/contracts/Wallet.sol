@@ -6,9 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import "@chainlink/contracts/src/v0.8/automation/interfaces/AutomationCompatibleInterface.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-
 
 import { IStrategy } from "./strategies/IStrategy.sol";
 import { ISwapsRouter } from "./swaps/ISwapsRouter.sol";
@@ -34,7 +32,7 @@ struct Transaction {
 	uint256 timestamp;
 }
 
-contract Wallet is Ownable, AutomationCompatibleInterface, IWallet, Pausable,AccessControl {
+contract Wallet is Ownable, AutomationCompatibleInterface, IWallet, AccessControl {
 	using TokenMaths for uint;
 
 	IERC20Metadata public stableAsset;
@@ -59,20 +57,7 @@ contract Wallet is Ownable, AutomationCompatibleInterface, IWallet, Pausable,Acc
 
 	uint256 public totalDeposited;
 	uint256 public totalWithdrawn;
-	bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-
-
-	function pause() external onlyOwner {
-		_pause();
-	}
-
-	function unpause() external onlyOwner {
-		_unpause();
-	}
-
-	function isPaused() external view returns (bool) {
-		return paused();
-	}
+	bool public paused = false;
 
 	constructor(
 		address stableTokenAddress,
@@ -87,10 +72,6 @@ contract Wallet is Ownable, AutomationCompatibleInterface, IWallet, Pausable,Acc
 		riskAssetFeed = AggregatorV3Interface(riskAssetFeedAddress);
 
 		swapRouter = ISwapsRouter(swapRouterAddress);
-        // to grant and revoke any roles
-		        _grantRole(PAUSER_ROLE, msg.sender);
-
- 
 	}
 
 	function deposit(uint256 amount) external onlyOwner {
@@ -119,7 +100,6 @@ contract Wallet is Ownable, AutomationCompatibleInterface, IWallet, Pausable,Acc
 		totalWithdrawn += amount;
 	}
 
-	// TODO, add event, this will give incorrect graph plot of earnings
 	function withdrawToken(address token, uint256 amount) public onlyOwner {
 		require(
 			IERC20Metadata(token).balanceOf(address(this)) >= amount,
@@ -130,6 +110,18 @@ contract Wallet is Ownable, AutomationCompatibleInterface, IWallet, Pausable,Acc
 			"Transfer failed"
 		);
 		emit Withdrawn(token, amount);
+	}
+
+	function pause() external onlyOwner {
+		paused = true;
+	}
+
+	function unpause() external onlyOwner {
+		paused = false;
+	}
+
+	function isPaused() external view returns (bool) {
+		return paused;
 	}
 
 	function getTransactions() public view returns (Transaction[] memory) {
@@ -198,12 +190,14 @@ contract Wallet is Ownable, AutomationCompatibleInterface, IWallet, Pausable,Acc
 		override
 		returns (bool upkeepNeeded, bytes memory performData)
 	{
+		if (paused) return (false, "");
 		return (strategy.shouldPerformUpkeep(), "");
 	}
 
 	function performUpkeep(
 		bytes calldata /* performData */
-	) external override whenNotPaused {
+	) external override {
+		require(!paused, "Strategy is paused");
 		if (strategy.shouldPerformUpkeep()) {
 			strategyExec();
 		}

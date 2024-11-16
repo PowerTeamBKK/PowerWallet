@@ -55,7 +55,7 @@ contract PowerLawLow is IStrategy, Ownable {
 
     //// IStrategy interface ////
 
-    function name() external view returns (string) {
+    function name() external view returns (string memory) {
         return "EASY";
     }
 
