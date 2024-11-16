@@ -283,28 +283,6 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
         <div key={wallet} className="bg-base-200 p-4 rounded-lg flex items-center gap-2">
           <WalletIcon className="h-5 w-5" />
           <Address address={wallet} />
-          <button className="btn btn-primary" onClick={approveUsdc}>
-            <PlusIcon className="h-5 w-5" />
-            Approve
-          </button>
-          <button className="btn btn-primary" onClick={depositUsdc}>
-            <PlusIcon className="h-5 w-5" />
-            Deposit
-          </button>
-          <button className="btn btn-primary" onClick={withdrawUsdc}>
-            <PlusIcon className="h-5 w-5" />
-            Withdraw
-          </button>
-
-          <button className="btn btn-primary" onClick={pauseWallet}>
-            <PlusIcon className="h-5 w-5" />
-            pause
-          </button>
-
-          <button className="btn btn-primary" onClick={unpauseWallet}>
-            <PlusIcon className="h-5 w-5" />
-            unpaused
-          </button>
         </div>
       ))}
     </div>
