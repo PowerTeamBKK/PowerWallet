@@ -80,6 +80,7 @@ npx hardhat run scripts/deployFactory.ts --network baseSepolia
 ## Generate ABI
 Generate contract ABIs:
 ```
+npx hardhat clear-abi
 npx hardhat export-abi
 ```
 

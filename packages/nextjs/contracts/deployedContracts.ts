@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   84532: {
     factory: {
-      address: "0x24556c87B753Bd30276D6E85FD4D03883C59994D",
+      address: "0xC749e37Be623D848B19396a5185093c7808bC5A7",
       abi: [
         {
           inputs: [
@@ -970,571 +970,749 @@ const deployedContracts = {
       address: "",
       abi: [
         {
-          inputs: [
+          "inputs": [
             {
-              internalType: "address",
-              name: "stableTokenAddress",
-              type: "address",
+              "internalType": "address",
+              "name": "stableTokenAddress",
+              "type": "address"
             },
             {
-              internalType: "address",
-              name: "riskTokenAddress",
-              type: "address",
+              "internalType": "address",
+              "name": "riskTokenAddress",
+              "type": "address"
             },
             {
-              internalType: "address",
-              name: "stableAssetFeedAddress",
-              type: "address",
+              "internalType": "address",
+              "name": "stableAssetFeedAddress",
+              "type": "address"
             },
             {
-              internalType: "address",
-              name: "riskAssetFeedAddress",
-              type: "address",
+              "internalType": "address",
+              "name": "riskAssetFeedAddress",
+              "type": "address"
             },
             {
-              internalType: "address",
-              name: "swapRouterAddress",
-              type: "address",
-            },
+              "internalType": "address",
+              "name": "swapRouterAddress",
+              "type": "address"
+            }
           ],
-          stateMutability: "nonpayable",
-          type: "constructor",
+          "stateMutability": "nonpayable",
+          "type": "constructor"
         },
         {
-          anonymous: false,
-          inputs: [
+          "anonymous": false,
+          "inputs": [
             {
-              indexed: true,
-              internalType: "address",
-              name: "token",
-              type: "address",
+              "indexed": true,
+              "internalType": "address",
+              "name": "token",
+              "type": "address"
             },
             {
-              indexed: false,
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
           ],
-          name: "Deposited",
-          type: "event",
+          "name": "Deposited",
+          "type": "event"
         },
         {
-          anonymous: false,
-          inputs: [
+          "anonymous": false,
+          "inputs": [
             {
-              indexed: true,
-              internalType: "address",
-              name: "previousOwner",
-              type: "address",
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
             },
             {
-              indexed: true,
-              internalType: "address",
-              name: "newOwner",
-              type: "address",
-            },
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
           ],
-          name: "OwnershipTransferred",
-          type: "event",
+          "name": "OwnershipTransferred",
+          "type": "event"
         },
         {
-          anonymous: false,
-          inputs: [
+          "anonymous": false,
+          "inputs": [
             {
-              indexed: false,
-              internalType: "address",
-              name: "account",
-              type: "address",
+              "indexed": true,
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
             },
+            {
+              "indexed": true,
+              "internalType": "bytes32",
+              "name": "previousAdminRole",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "internalType": "bytes32",
+              "name": "newAdminRole",
+              "type": "bytes32"
+            }
           ],
-          name: "Paused",
-          type: "event",
+          "name": "RoleAdminChanged",
+          "type": "event"
         },
         {
-          anonymous: false,
-          inputs: [
+          "anonymous": false,
+          "inputs": [
             {
-              indexed: false,
-              internalType: "string",
-              name: "reason",
-              type: "string",
+              "indexed": true,
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
             },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            }
           ],
-          name: "SwapError",
-          type: "event",
+          "name": "RoleGranted",
+          "type": "event"
         },
         {
-          anonymous: false,
-          inputs: [
+          "anonymous": false,
+          "inputs": [
             {
-              indexed: false,
-              internalType: "string",
-              name: "side",
-              type: "string",
+              "indexed": true,
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
             },
             {
-              indexed: false,
-              internalType: "uint256",
-              name: "sold",
-              type: "uint256",
+              "indexed": true,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
             },
             {
-              indexed: false,
-              internalType: "uint256",
-              name: "bought",
-              type: "uint256",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "slippage",
-              type: "uint256",
-            },
+              "indexed": true,
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            }
           ],
-          name: "Swapped",
-          type: "event",
+          "name": "RoleRevoked",
+          "type": "event"
         },
         {
-          anonymous: false,
-          inputs: [
+          "anonymous": false,
+          "inputs": [
             {
-              indexed: false,
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
+              "indexed": false,
+              "internalType": "string",
+              "name": "reason",
+              "type": "string"
+            }
           ],
-          name: "Unpaused",
-          type: "event",
+          "name": "SwapError",
+          "type": "event"
         },
         {
-          anonymous: false,
-          inputs: [
+          "anonymous": false,
+          "inputs": [
             {
-              indexed: true,
-              internalType: "address",
-              name: "token",
-              type: "address",
+              "indexed": false,
+              "internalType": "string",
+              "name": "side",
+              "type": "string"
             },
             {
-              indexed: false,
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "sold",
+              "type": "uint256"
             },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "bought",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "slippage",
+              "type": "uint256"
+            }
           ],
-          name: "Withdrawn",
-          type: "event",
+          "name": "Swapped",
+          "type": "event"
         },
         {
-          inputs: [
+          "anonymous": false,
+          "inputs": [
             {
-              internalType: "bytes",
-              name: "",
-              type: "bytes",
+              "indexed": true,
+              "internalType": "address",
+              "name": "token",
+              "type": "address"
             },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
           ],
-          name: "checkUpkeep",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "upkeepNeeded",
-              type: "bool",
-            },
-            {
-              internalType: "bytes",
-              name: "performData",
-              type: "bytes",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
+          "name": "Withdrawn",
+          "type": "event"
         },
         {
-          inputs: [
+          "inputs": [],
+          "name": "DEFAULT_ADMIN_ROLE",
+          "outputs": [
             {
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
+            }
           ],
-          name: "deposit",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "feeV3",
-          outputs: [
+          "inputs": [
             {
-              internalType: "uint24",
-              name: "",
-              type: "uint24",
-            },
+              "internalType": "bytes",
+              "name": "",
+              "type": "bytes"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "name": "checkUpkeep",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "upkeepNeeded",
+              "type": "bool"
+            },
+            {
+              "internalType": "bytes",
+              "name": "performData",
+              "type": "bytes"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "getTransactionCount",
-          outputs: [
+          "inputs": [
             {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "name": "deposit",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "getTransactions",
-          outputs: [
+          "inputs": [],
+          "name": "feeV3",
+          "outputs": [
             {
-              components: [
+              "internalType": "uint24",
+              "name": "",
+              "type": "uint24"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
+            }
+          ],
+          "name": "getRoleAdmin",
+          "outputs": [
+            {
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "getTransactionCount",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "getTransactions",
+          "outputs": [
+            {
+              "components": [
                 {
-                  internalType: "enum TransactionType",
-                  name: "transactionType",
-                  type: "uint8",
+                  "internalType": "enum TransactionType",
+                  "name": "transactionType",
+                  "type": "uint8"
                 },
                 {
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
+                  "internalType": "uint256",
+                  "name": "amount",
+                  "type": "uint256"
                 },
                 {
-                  internalType: "uint256",
-                  name: "timestamp",
-                  type: "uint256",
-                },
+                  "internalType": "uint256",
+                  "name": "timestamp",
+                  "type": "uint256"
+                }
               ],
-              internalType: "struct Transaction[]",
-              name: "",
-              type: "tuple[]",
-            },
+              "internalType": "struct Transaction[]",
+              "name": "",
+              "type": "tuple[]"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "isPaused",
-          outputs: [
+          "inputs": [
             {
-              internalType: "bool",
-              name: "",
-              type: "bool",
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
             },
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "name": "grantRole",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "owner",
-          outputs: [
+          "inputs": [
             {
-              internalType: "address",
-              name: "",
-              type: "address",
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
             },
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "pause",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "paused",
-          outputs: [
+          "name": "hasRole",
+          "outputs": [
             {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [],
+          "name": "isPaused",
+          "outputs": [
             {
-              internalType: "bytes",
-              name: "",
-              type: "bytes",
-            },
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
           ],
-          name: "performUpkeep",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "renounceOwnership",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "riskAsset",
-          outputs: [
+          "inputs": [],
+          "name": "owner",
+          "outputs": [
             {
-              internalType: "contract IERC20Metadata",
-              name: "",
-              type: "address",
-            },
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "riskAssetFeed",
-          outputs: [
-            {
-              internalType: "contract AggregatorV3Interface",
-              name: "",
-              type: "address",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
+          "inputs": [],
+          "name": "pause",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "riskAssetValue",
-          outputs: [
+          "inputs": [],
+          "name": "paused",
+          "outputs": [
             {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [
             {
-              internalType: "address",
-              name: "strategyAddress",
-              type: "address",
-            },
+              "internalType": "bytes",
+              "name": "",
+              "type": "bytes"
+            }
           ],
-          name: "setStrategy",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "name": "performUpkeep",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "slippageThereshold",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
+          "inputs": [],
+          "name": "renounceOwnership",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "stableAsset",
-          outputs: [
+          "inputs": [
             {
-              internalType: "contract IERC20Metadata",
-              name: "",
-              type: "address",
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
             },
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "name": "renounceRole",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "stableAssetFeed",
-          outputs: [
+          "inputs": [
             {
-              internalType: "contract AggregatorV3Interface",
-              name: "",
-              type: "address",
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
             },
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "name": "revokeRole",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "stableAssetValue",
-          outputs: [
+          "inputs": [],
+          "name": "riskAsset",
+          "outputs": [
             {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
+              "internalType": "contract IERC20Metadata",
+              "name": "",
+              "type": "address"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "strategy",
-          outputs: [
+          "inputs": [],
+          "name": "riskAssetFeed",
+          "outputs": [
             {
-              internalType: "contract IStrategy",
-              name: "",
-              type: "address",
-            },
+              "internalType": "contract AggregatorV3Interface",
+              "name": "",
+              "type": "address"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "swapRouter",
-          outputs: [
+          "inputs": [],
+          "name": "riskAssetValue",
+          "outputs": [
             {
-              internalType: "contract ISwapsRouter",
-              name: "",
-              type: "address",
-            },
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "totalDeposited",
-          outputs: [
+          "inputs": [
             {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
+              "internalType": "address",
+              "name": "strategyAddress",
+              "type": "address"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "name": "setStrategy",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "totalValue",
-          outputs: [
+          "inputs": [],
+          "name": "slippageThereshold",
+          "outputs": [
             {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "totalWithdrawn",
-          outputs: [
+          "inputs": [],
+          "name": "stableAsset",
+          "outputs": [
             {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
+              "internalType": "contract IERC20Metadata",
+              "name": "",
+              "type": "address"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [],
+          "name": "stableAssetFeed",
+          "outputs": [
             {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
+              "internalType": "contract AggregatorV3Interface",
+              "name": "",
+              "type": "address"
+            }
           ],
-          name: "transactions",
-          outputs: [
-            {
-              internalType: "enum TransactionType",
-              name: "transactionType",
-              type: "uint8",
-            },
-            {
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "timestamp",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [],
+          "name": "stableAssetValue",
+          "outputs": [
             {
-              internalType: "address",
-              name: "newOwner",
-              type: "address",
-            },
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
           ],
-          name: "transferOwnership",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "unpause",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "inputs": [],
+          "name": "strategy",
+          "outputs": [
+            {
+              "internalType": "contract IStrategy",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [
             {
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
+              "internalType": "bytes4",
+              "name": "interfaceId",
+              "type": "bytes4"
+            }
           ],
-          name: "withdraw",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "name": "supportsInterface",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [],
+          "name": "swapRouter",
+          "outputs": [
             {
-              internalType: "address",
-              name: "token",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
+              "internalType": "contract ISwapsRouter",
+              "name": "",
+              "type": "address"
+            }
           ],
-          name: "withdrawToken",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
+        {
+          "inputs": [],
+          "name": "totalDeposited",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "totalValue",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "totalWithdrawn",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "name": "transactions",
+          "outputs": [
+            {
+              "internalType": "enum TransactionType",
+              "name": "transactionType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "timestamp",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "transferOwnership",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "unpause",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "withdraw",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "token",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "withdrawToken",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        }
       ],
     },
   },

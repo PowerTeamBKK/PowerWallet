@@ -5,8 +5,8 @@ import addresses_json from "../conf/addresses.json";
 
 type NetworkAddresses = typeof addresses_json;
 
-// Factory contract deployed to: 0x24556c87B753Bd30276D6E85FD4D03883C59994D
-// https://base-sepolia.blockscout.com/address/0x24556c87B753Bd30276D6E85FD4D03883C59994D#code
+// Factory contract deployed to: 0xC749e37Be623D848B19396a5185093c7808bC5A7
+// https://base-sepolia.blockscout.com/address/0xC749e37Be623D848B19396a5185093c7808bC5A7#code
 
 async function main() {
   const [deployer] = await ethers.getSigners();
@@ -23,7 +23,7 @@ async function main() {
     addresses["btcusd_feed"],
     addresses["swaps_router"],
     {
-      gasPrice: 100000000000
+      gasPrice: 40000000000
     },
   );
 
