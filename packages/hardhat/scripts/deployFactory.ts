@@ -5,7 +5,7 @@ import addresses_json from "../conf/addresses.json";
 
 type NetworkAddresses = typeof addresses_json;
 
-// Factory contract deployed to: 0xE0087A5EcAaF884894946191eb9d5FD0841D95Ec
+// Factory contract deployed to: 0x17bCEf39A8212494240c2dff94886fCeb5723B0E
 // https://base-sepolia.blockscout.com/address/0xE0087A5EcAaF884894946191eb9d5FD0841D95Ec#code
 
 async function main() {
@@ -24,9 +24,10 @@ async function main() {
     addresses["swaps_router"],
   )
   
-  await factory.deployed();
+  // await factory.deployed();
+  // await factory.target;
 
-  console.log("Factory contract deployed to:", factory.address);
+  console.log("Factory contract deployed to:", factory.target);
   console.log("Constructor arguments:", addresses["usdc"], addresses["wbtc"], addresses["usdcusd_feed"], addresses["btcusd_feed"]);
   
   // let owner = await newFactory.owner();
@@ -43,7 +44,7 @@ async function main() {
   console.log("riskAssetFeed:", riskAssetFeed);
   
   console.log(">>> TO VERIFY THE CONTRACT RUN:");
-  console.log("npx hardhat verify --network ", network.name, factory.address, stableAsset, riskAsset, stableAssetFeed, riskAssetFeed, swapsRouter);
+  console.log("npx hardhat verify --network ", network.name, factory.target, stableAsset, riskAsset, stableAssetFeed, riskAssetFeed, swapsRouter);
 }
 
 main()

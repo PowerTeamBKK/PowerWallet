@@ -5,14 +5,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import { IWallet } from "../Wallet.sol";
-import { PowerLaw } from "../strategies/PowerLaw.sol";
+
 
 import "hardhat/console.sol";
 
 import { IStrategy, StrategyAction } from "./IStrategy.sol";
 
 
-contract PowerLaw is IStrategy, Ownable {
+contract PowerLawHigh is IStrategy, Ownable {
 
     uint public upkeepInterval = 24 * 60 * 60;
     uint public lastEvalTimestamp;
