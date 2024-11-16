@@ -9,7 +9,7 @@ export const metadata = getMetadata({
 
 const Debug: NextPage = () => {
   return (
-    <>
+    <div className="w-full mt-16 lg:mt-0"> {/* Added margin top for mobile */}
       <DebugContracts />
       <div className="text-center mt-8 bg-secondary p-10">
         <h1 className="text-4xl my-0">Debug Contracts</h1>
@@ -21,7 +21,7 @@ const Debug: NextPage = () => {
           </code>{" "}
         </p>
       </div>
-    </>
+    </div>
   );
 };
 

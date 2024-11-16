@@ -19,10 +19,14 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex min-h-screen">
         <Header />
-        <main className="relative flex flex-col flex-1">{children}</main>
-        <Footer />
+        <div className="flex flex-col flex-1 lg:ml-64">
+          {" "}
+          {/* Add margin for sidebar */}
+          <main className="flex-1 p-4">{children}</main>
+          <Footer />
+        </div>
       </div>
       <Toaster />
     </>

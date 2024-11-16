@@ -22,7 +22,18 @@ const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z
 // forking rpc url
 // const forkingURL = process.env.FORKING_URL || "";
 
-const config: HardhatUserConfig = {
+interface ExtendedHardhatUserConfig extends HardhatUserConfig {
+  abiExporter?: {
+    path: string;
+    clear: boolean;
+    flat: boolean;
+    only: string[];
+    spacing: number;
+    format: string;
+  };
+}
+
+const config: ExtendedHardhatUserConfig = {
   solidity: {
     compilers: [
       {
@@ -100,12 +111,12 @@ const config: HardhatUserConfig = {
     enabled: false,
   },
   abiExporter: {
-    path: './abis',     // Output directory for ABIs
-    clear: true,        // Clear the directory before export
-    flat: true,         // Flatten the output structure (no nested folders)
-    only: [],           // Optional: only export specific contracts
-    spacing: 2,         // JSON spacing (pretty print)
-    format: 'json'      // Format of the output files
+    path: "./abis", // Output directory for ABIs
+    clear: true, // Clear the directory before export
+    flat: true, // Flatten the output structure (no nested folders)
+    only: [], // Optional: only export specific contracts
+    spacing: 2, // JSON spacing (pretty print)
+    format: "json", // Format of the output files
   },
 };
 
