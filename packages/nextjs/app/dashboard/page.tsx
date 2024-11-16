@@ -8,9 +8,7 @@ import { useAccount } from "wagmi";
 import { useWriteContract } from "wagmi";
 import { PlusIcon, WalletIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
-import DeployedContracts from "~~/contracts/deployedContracts";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
-import { useTransactor } from "~~/hooks/scaffold-eth";
 
 interface StrategyModalProps {
   isOpen: boolean;
@@ -173,132 +171,16 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
 };
 
 const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
-  const { writeContractAsync: writeUSDCContractAsync } = useScaffoldWriteContract("usdc");
+  useScaffoldWriteContract("usdc");
 
-  const approveUsdc = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // wallet address
-
-    const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
-    const amount = "1";
-
-    await writeUSDCContractAsync(
-      {
-        functionName: "approve",
-        args: [walletAddress, BigInt(amount)],
-      },
-      {
-        onBlockConfirmation: txnReceipt => {
-          console.log("📦 Transaction blockHash", txnReceipt.blockHash);
-          toast.success("USDC approved!");
-        },
-      },
-    );
-  };
-
-  const { writeContractAsync: writeWalletContractAsync } = useWriteContract();
-  const writeTx = useTransactor();
-
-  const pauseWallet = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    await writeUSDCContractAsync(
-      {
-        functionName: "pause",
-      },
-      {
-        onBlockConfirmation: txnReceipt => {
-          console.log("📦 Transaction blockHash", txnReceipt.blockHash);
-          toast.success("pause !");
-        },
-      },
-    );
-  };
-
-  const unpauseWallet = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // wallet address
-
-    await writeUSDCContractAsync(
-      {
-        functionName: "unpause",
-      },
-      {
-        onBlockConfirmation: txnReceipt => {
-          console.log("📦 Transaction blockHash", txnReceipt.blockHash);
-          toast.success("Pause contract!");
-        },
-      },
-    );
-  };
-  const depositUsdc = async () => {
-    const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
-    const amount = 1n;
-    const writeContractAsyncWithParams = () =>
-      writeWalletContractAsync({
-        address: walletAddress,
-        abi: DeployedContracts[84532].wallet.abi,
-        functionName: "deposit",
-        args: [amount],
-      });
-
-    try {
-      await writeTx(writeContractAsyncWithParams, { blockConfirmations: 1 });
-    } catch (e) {
-      console.log("Unexpected error in writeTx", e);
-    }
-  };
-
-  const withdrawUsdc = async () => {
-    const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
-    const amount = 1n;
-    const writeContractAsyncWithParams = () =>
-      writeWalletContractAsync({
-        address: walletAddress,
-        abi: DeployedContracts[84532].wallet.abi,
-        functionName: "withdraw",
-        args: [amount],
-      });
-
-    try {
-      await writeTx(writeContractAsyncWithParams, { blockConfirmations: 1 });
-    } catch (e) {
-      console.log("Unexpected error in writeTx", e);
-    }
-  };
+  useWriteContract();
 
   return (
     <div className="space-y-4 overflow-x-auto">
       {wallets.map(wallet => (
-        <div key={wallet} className="bg-base-200 p-4 rounded-lg">
-          <div className="flex items-center gap-2 mb-3">
-            <WalletIcon className="h-5 w-5" />
-            <Address address={wallet} />
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button className="btn btn-primary btn-sm" onClick={approveUsdc}>
-              <PlusIcon className="h-4 w-4" />
-              Approve
-            </button>
-            <button className="btn btn-primary btn-sm" onClick={depositUsdc}>
-              <PlusIcon className="h-4 w-4" />
-              Deposit
-            </button>
-            <button className="btn btn-primary btn-sm" onClick={withdrawUsdc}>
-              <PlusIcon className="h-4 w-4" />
-              Withdraw
-            </button>
-            <button className="btn btn-primary btn-sm" onClick={pauseWallet}>
-              <PlusIcon className="h-4 w-4" />
-              Pause
-            </button>
-            <button className="btn btn-primary btn-sm" onClick={unpauseWallet}>
-              <PlusIcon className="h-4 w-4" />
-              Unpause
-            </button>
-          </div>
+        <div key={wallet} className="bg-base-200 p-4 rounded-lg flex items-center gap-2">
+          <WalletIcon className="h-5 w-5" />
+          <Address address={wallet} />
         </div>
       ))}
     </div>
@@ -334,7 +216,7 @@ const Dashboard: NextPage = () => {
   }
 
   return (
-    <div className="max-w-1xl mx-auto p-4 mt-16 lg:mt-2 overflow-x-hidden">
+    <div className="max-w-1xl mx-auto p-4 mt-16 lg:mt-2">
       {/* Oval Header */}
       <div className="bg-base-100 rounded-xl shadow-lg p-6 mb-8 flex flex-col sm:flex-row justify-between items-center gap-4">
         <h1 className="text-3xl font-bold">Your Strategies</h1>
