@@ -1,98 +1,142 @@
 "use client";
 
+import { useState } from "react";
+import FactoryABI from "./Factory.json";
 import { NextPage } from "next";
-import { useAccount } from "wagmi";
-import { ArrowTrendingUpIcon, ChartBarIcon, ClockIcon, WalletIcon } from "@heroicons/react/24/outline";
+import { toast } from "react-hot-toast";
+// import { parseEther } from "viem";
+import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { PlusIcon, WalletIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
-import { useGlobalState } from "~~/services/store/store";
 
-interface StatCardProps {
-  title: string;
-  value: string;
-  icon: React.ReactNode;
+interface StrategyModalProps {
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-const StatCard = ({ title, value, icon }: StatCardProps) => (
-  <div className="bg-base-100 rounded-xl p-4 shadow-lg w-full">
-    <div className="flex items-center gap-3">
-      <div className="bg-primary/10 p-2 rounded-lg shrink-0">
-        {icon}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-base-content/60 truncate">{title}</p>
-        <p className="text-xl font-bold truncate">{value}</p>
-      </div>
-    </div>
-  </div>
-);
+const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
+  const [amount, setAmount] = useState("");
+  const [interval, setInterval] = useState("");
+  const { writeContract } = useWriteContract();
 
-const Dashboard: NextPage = () => {
-  const { address: connectedAddress } = useAccount();
-  const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrency.price);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await writeContract({
+        address: "0x24556c87B753Bd30276D6E85FD4D03883C59994D" as `0x${string}`,
+        abi: FactoryABI,
+        functionName: "newWalletDCA",
+        args: ["100000000000", "100000000000"],
+      });
+      toast.success("Strategy created successfully!");
+      onClose();
+    } catch (error: any) {
+      toast.error(`Failed to create strategy: ${error?.message || "Unknown error"}`);
+    }
+  };
+
+  if (!isOpen) return null;
 
   return (
-    <div className="flex flex-col items-center min-h-screen w-full mt-16 lg:mt-0 overflow-hidden">
-      <div className="w-full max-w-7xl mx-auto px-4 lg:px-8 py-8">
-        {/* Header */}
-        <div className="flex flex-col gap-2 text-center lg:text-left">
-          <h1 className="text-4xl font-bold">Dashboard</h1>
-          <div className="flex items-center gap-2 justify-center lg:justify-start">
-            <WalletIcon className="h-6 w-6" />
-            <Address address={connectedAddress} />
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-base-100 p-6 rounded-xl w-96" onClick={e => e.stopPropagation()}>
+        <h3 className="text-2xl font-bold mb-4">Create New Strategy</h3>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="label">Amount (ETH)</label>
+            <input
+              type="number"
+              step="0.000000000000000001"
+              min="0"
+              className="input input-bordered w-full"
+              value={amount}
+              onChange={e => setAmount(e.target.value)}
+              required
+            />
           </div>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 w-full">
-          <StatCard
-            title="ETH Price"
-            value={`$${nativeCurrencyPrice?.toFixed(2) || "0.00"}`}
-            icon={<ChartBarIcon className="h-6 w-6" />}
-          />
-          <StatCard 
-            title="Balance" 
-            value="0.00 ETH" 
-            icon={<WalletIcon className="h-6 w-6" />} 
-          />
-          <StatCard 
-            title="24h Change" 
-            value="+0.00%" 
-            icon={<ArrowTrendingUpIcon className="h-6 w-6" />} 
-          />
-          <StatCard 
-            title="Transactions" 
-            value="0" 
-            icon={<ClockIcon className="h-6 w-6" />} 
-          />
-        </div>
-
-        {/* Transaction History */}
-        <div className="bg-base-100 rounded-xl p-6 shadow-lg mt-8 w-full">
-          <h2 className="text-2xl font-bold mb-4 text-center lg:text-left">Recent Transactions</h2>
-          <div className="w-full overflow-x-auto">
-            <table className="w-full table-auto">
-              <thead>
-                <tr>
-                  <th className="w-1/6 text-left">Type</th>
-                  <th className="w-1/6 text-left">Amount</th>
-                  <th className="w-1/2 text-left">Address</th>
-                  <th className="w-1/6 text-left">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="hover">
-                  <td className="whitespace-nowrap">Send</td>
-                  <td className="whitespace-nowrap">0.1 ETH</td>
-                  <td className="max-w-0 overflow-hidden text-ellipsis">
-                    <Address address="0x0000000000000000000000000000000000000000" />
-                  </td>
-                  <td className="whitespace-nowrap">Just now</td>
-                </tr>
-              </tbody>
-            </table>
+          <div>
+            <label className="label">Interval (seconds)</label>
+            <input
+              type="number"
+              min="1"
+              className="input input-bordered w-full"
+              value={interval}
+              onChange={e => setInterval(e.target.value)}
+              required
+            />
           </div>
-        </div>
+          <div className="flex justify-end gap-2">
+            <button type="button" className="btn" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-primary">
+              {"Create Strategy"}
+            </button>
+          </div>
+        </form>
       </div>
+    </div>
+  );
+};
+
+const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
+  return (
+    <div className="space-y-2">
+      {wallets.map(wallet => (
+        <div key={wallet} className="bg-base-200 p-4 rounded-lg flex items-center gap-2">
+          <WalletIcon className="h-5 w-5" />
+          <Address address={wallet} />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const Dashboard: NextPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { address: connectedAddress } = useAccount();
+
+  const { data: userWallets = [], isLoading } = useReadContract({
+    address: "0x24556c87B753Bd30276D6E85FD4D03883C59994D" as `0x${string}`,
+    abi: FactoryABI,
+    functionName: "getWalletsByUser",
+    args: [connectedAddress],
+  });
+  //   console.log(userWallets, userWallets.length);
+  if (!connectedAddress) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-lg">Please connect your wallet to continue</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto p-6 mt-16 lg:mt-0">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Your Strategies</h1>
+        <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
+          <PlusIcon className="h-5 w-5" />
+          Add New Strategy
+        </button>
+      </div>
+
+      {isLoading ? (
+        <div className="text-center">Loading...</div>
+      ) : (
+        <>
+          {userWallets && userWallets.length > 0 ? (
+            <WalletList wallets={userWallets as `0x${string}`[]} />
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-base-content/60 mb-4">No strategies found</p>
+              <p className="text-sm">Create your first strategy to get started</p>
+            </div>
+          )}
+        </>
+      )}
+
+      <StrategyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 };
