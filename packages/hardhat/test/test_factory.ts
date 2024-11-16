@@ -12,7 +12,7 @@ describe("Factory Contract", function () {
     expect(factoryContract.target).to.not.equal(0);
   });
 
-  it.only("Should deploy Wallet", async function () {
+  it("Should deploy Wallet", async function () {
     const { factoryContract, usdc, wbtc, stableAssetFeed, riskAssetFeed, user0, user1 } = await loadFixture(deployFactoryContract);
 
     let factory = factoryContract as Factory;
