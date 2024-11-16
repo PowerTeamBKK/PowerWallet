@@ -10,12 +10,9 @@ import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useWriteContract } from "wagmi";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
-
-
-
-
 const DollarCostAverage: NextPage = () => {
   const { address: connectedAddress } = useAccount();
+
 
   const { data: userWallets, isLoading } = useScaffoldReadContract({
     contractName: "factory",
@@ -23,6 +20,10 @@ const DollarCostAverage: NextPage = () => {
     args: [connectedAddress],
   });
 
+  const firstWallet = userWallets?.[0];
+
+
+ 
   if (!connectedAddress) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -48,7 +49,6 @@ const DollarCostAverage: NextPage = () => {
   }
 
   // Get first wallet address
-  const firstWallet = userWallets[0];
 
   return (
     <div className="max-w-1xl mx-auto p-4 mt-16 lg:mt-2">
@@ -104,6 +104,9 @@ const DollarCostAverage: NextPage = () => {
 
 const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
   const { writeContractAsync: writeUSDCContractAsync } = useScaffoldWriteContract("usdc");
+  const { address: connectedAddress } = useAccount();
+
+  const firstWallet = wallets[0];
 
   const approveUsdc = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -207,20 +210,37 @@ const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
     }
   };
 
+  const { data: approval, isLoading } = useScaffoldReadContract({
+    contractName: "usdc",
+    functionName: "allowance",
+    args: [connectedAddress, firstWallet],
+  });
+
+  const isApprovalSufficient = approval && Number(approval) >= 1n; // Ensure approval is defined and numeric
+
+  // console.log("approval is approval",approval)
+  // console.log("isApprovalSufficient",isApprovalSufficient)
+
+
   return (
     <div className="space-y-2">
       {wallets.map(wallet => (
         <div key={wallet} className="bg-base-200 p-4 rounded-lg flex items-center gap-2">
           <WalletIcon className="h-5 w-5" />
           <Address address={wallet} />
-          <button className="btn btn-primary" onClick={approveUsdc}>
+          <button
+            className="btn btn-primary"
+            onClick={isApprovalSufficient ? depositUsdc : approveUsdc}
+            disabled={isLoading || approval === undefined} // Disable while loading or undefined
+          >
             <PlusIcon className="h-5 w-5" />
-            Approve
+            {isLoading
+              ? "Loading..."
+              : isApprovalSufficient
+                ? "Deposit"
+                : "Approve"}
           </button>
-          <button className="btn btn-primary" onClick={depositUsdc}>
-            <PlusIcon className="h-5 w-5" />
-            Deposit
-          </button>
+
           <button className="btn btn-primary" onClick={withdrawUsdc}>
             <PlusIcon className="h-5 w-5" />
             Withdraw
