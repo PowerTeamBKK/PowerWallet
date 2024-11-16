@@ -7,11 +7,10 @@ import erc20_abi from "../../abis/erc20.json";
 import pricefeed_abi from "../../abis/pricefeed.json";
 
 const usdcSource = '0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640' // rich account owning 86,402,632 USDC
-const USDC = 1_000_000; // decimals: 6
+export const USDC = 1_000_000; // decimals: 6
 
 type NetworkAddresses = typeof addresses_json;
 const addresses = addresses_json[network.name as keyof NetworkAddresses];
-
 
 let usdcAddress = addresses["usdc"];
 let wbtcAddress = addresses["wbtc"];

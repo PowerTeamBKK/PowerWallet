@@ -1,0 +1,23 @@
+{
+    "baseSepolia": {
+        "usdc": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+        "wbtc": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",
+        "link": "0xE4aB69C077896252FAFBD49EFD26B5D171A32410",
+        "usdcusd_feed": "0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165",
+        "btcusd_feed": "0x0FB99723Aee6f420beAD13e6bBB79b7E6F034298",
+        "factory": "0xDCba4a4dd0d55eAB5BE1ea946B98029c561b6171",
+        "swaps_router": "0xEaf93aebB5874c206d974f9560D6fd77c81648a9",
+        "uniswap_v3_quoter": "0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24",
+        "uniswap_v3_router": "0x050E797f3625EC8785265e1d9BDd4799b97528A1"
+    },
+    "hardhat": {
+        "usdc": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        "wbtc": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+        "usdcusd_feed": "0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6",
+        "btcusd_feed": "0xF4030086522a5bEEa4988F8cA5B36dbC97BeE88c",
+        "factory": "",
+        "swaps_router": "",
+        "uniswap_v3_quoter": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+        "uniswap_v3_router": "0xE592427A0AEce92De3Edee1F18E0157C05861564"
+    }
+}

@@ -22,7 +22,7 @@ const config: HardhatUserConfig = {
   solidity: {
     compilers: [
       {
-        version: "0.8.20",
+        version: "0.8.27",
         settings: {
           optimizer: {
             enabled: true,
@@ -33,7 +33,7 @@ const config: HardhatUserConfig = {
       },
     ],
   },
-  defaultNetwork: "localhost",
+  defaultNetwork: "hardhat",
   namedAccounts: {
     deployer: {
       // By default, it will take the first Hardhat account as the deployer
@@ -46,8 +46,9 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         url: forkingURL,
-        enabled: process.env.MAINNET_FORKING_ENABLED === "true",
+        blockNumber: 21175460 
       },
+      accounts: { accountsBalance: "100000000000000000000" }
     },
     mainnet: {
       url: `https://cloudflare-eth.com`,
