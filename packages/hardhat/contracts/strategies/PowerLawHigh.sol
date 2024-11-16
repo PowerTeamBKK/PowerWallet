@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import { IWallet } from "../Wallet.sol";
 
-import "hardhat/console.sol";
 import "../lib/TokenMaths.sol";
 
 import { IStrategy, StrategyAction } from "./IStrategy.sol";
@@ -77,7 +76,7 @@ contract PowerLawHigh is IStrategy, Ownable {
         ( , int price1, , , ) = riskAssetFeed.latestRoundData();
 
         int deltaPricePerc = int(PERCENT_SCALE) * (price1 - int(modelPrice)) / int(modelPrice);
-        
+
         // should sell when price is 100% above the power law trend
         uint targetPricePercUpPercent = higherBandPerc * PERCENT_SCALE / 100;
         bool shouldSell = deltaPricePerc > 0 && uint(deltaPricePerc) >= targetPricePercUpPercent;

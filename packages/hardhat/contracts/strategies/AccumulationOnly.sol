@@ -5,8 +5,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import { IWallet } from "../Wallet.sol";
 import { IStrategy, StrategyAction } from "./IStrategy.sol";
 
-import "hardhat/console.sol";
-
 
 contract AccumulationOnly is IStrategy, Ownable 
 {

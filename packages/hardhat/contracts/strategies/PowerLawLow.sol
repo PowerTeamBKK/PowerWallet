@@ -6,8 +6,9 @@ import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import { IWallet } from "../Wallet.sol";
 
-import "hardhat/console.sol";
 import "../lib/TokenMaths.sol";
+
+// import "hardhat/console.sol";
 
 import { IStrategy, StrategyAction } from "./IStrategy.sol";
 
@@ -76,9 +77,9 @@ contract PowerLawLow is IStrategy, Ownable {
         ( , int price0, , , ) = stableAssetFeed.latestRoundData();
         ( , int price1, , , ) = riskAssetFeed.latestRoundData();
 
-        int deltaPricePerc = int(PERCENT_SCALE) * (price0 - int(modelPrice)) / int(modelPrice);
+        int deltaPricePerc = int(PERCENT_SCALE) * (price1 - int(modelPrice)) / int(modelPrice);
         
-        // should sell when price is 25% above the power law trend
+        // should sell when price is 25% above the power law trend (2500)
         uint targetPricePercUpPercent = higherBandPerc * PERCENT_SCALE / 100;
         bool shouldSell = deltaPricePerc > 0 && uint(deltaPricePerc) >= targetPricePercUpPercent;
 
@@ -94,9 +95,9 @@ contract PowerLawLow is IStrategy, Ownable {
         }
 
         // should buy when price is 15% below the power law trend
-        uint targetPricePercDownPercent = lowerBandPerc * PERCENT_SCALE / 100;
+        uint targetPricePercDownPercent = lowerBandPerc * PERCENT_SCALE / 100; // 1500
         bool shouldBuy = deltaPricePerc < 0 && deltaPricePerc <= -1 * int(targetPricePercDownPercent);
-                    
+
         if (shouldBuy) {
             // need to BUY invest tokens spending depositTokens
             action = StrategyAction.BUY;

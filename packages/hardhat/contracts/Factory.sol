@@ -9,7 +9,6 @@ import { PowerLawLow } from "./strategies/PowerLawLow.sol";
 import { PowerLawHigh } from "./strategies/PowerLawHigh.sol";
 
 // Uncomment this line to use console.log
-// import "hardhat/console.sol";
 
 contract Factory is Ownable {
 	// Mapping from user address to deployed Wallet addresses

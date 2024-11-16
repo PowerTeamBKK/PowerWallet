@@ -19,5 +19,13 @@ describe("Power Law", function () {
     expect(Number(modelPrice) / priceScale).to.be.approximately(Number(feedPrice) / priceScale,  2000);
 
   });
+
+  it("should get the current power law price", async function () {
+    const { powerLawLowStrategy, wbtc, riskAssetFeed } = await loadFixture(deployPowerLawLowContract);
+  
+    const [action, amountIn] = await powerLawLowStrategy.eval()
+    expect(action).to.equals(0);    // NONE
+    expect(amountIn).to.equals(0);  // 0 USDC
+  });
    
 });
