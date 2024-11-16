@@ -5,22 +5,39 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAccount } from "wagmi";
-import { Bars3Icon, ChartBarSquareIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, ChartBarSquareIcon, Squares2X2Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
-
-const menuLinks = [
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: <ChartBarSquareIcon className="h-4 w-4" />,
-    requiresConnection: true,
-  },
-];
+import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
 const HeaderMenuLinks = ({ onLinkClick }: { onLinkClick?: () => void }) => {
   const pathname = usePathname();
   const { address } = useAccount();
+  
+  const { data: userWallets } = useScaffoldReadContract({
+    contractName: "factory",
+    functionName: "getWalletsByUser",
+    args: [address],
+  });
+
+  const menuLinks = [
+    {
+      label: "Dashboard",
+      href: "/dashboard",
+      icon: <ChartBarSquareIcon className="h-4 w-4" />,
+      requiresConnection: true,
+    },
+    ...(userWallets && Array.isArray(userWallets) && userWallets.length > 0
+      ? [
+          {
+            label: "Dollar Cost Average",
+            href: "/dca",
+            icon: <Squares2X2Icon className="h-4 w-4" />,
+            requiresConnection: true,
+          },
+        ]
+      : []),
+  ];
 
   return (
     <>
