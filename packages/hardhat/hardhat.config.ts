@@ -9,6 +9,7 @@ import "solidity-coverage";
 import "@nomicfoundation/hardhat-verify";
 import "hardhat-deploy";
 import "hardhat-deploy-ethers";
+import "hardhat-abi-exporter";
 
 // If not set, it uses the hardhat account 0 private key.
 const deployerPrivateKey =
@@ -97,6 +98,14 @@ const config: HardhatUserConfig = {
   },
   sourcify: {
     enabled: false,
+  },
+  abiExporter: {
+    path: './abis',     // Output directory for ABIs
+    clear: true,        // Clear the directory before export
+    flat: true,         // Flatten the output structure (no nested folders)
+    only: [],           // Optional: only export specific contracts
+    spacing: 2,         // JSON spacing (pretty print)
+    format: 'json'      // Format of the output files
   },
 };
 

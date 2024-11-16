@@ -77,6 +77,12 @@ To deploy the Factory contract:
 npx hardhat run scripts/deployFactory.ts --network baseSepolia
 ```
 
+## Generate ABI
+Generate contract ABIs:
+```
+npx hardhat export-abi
+```
+
 ## Documentation
 
 Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
