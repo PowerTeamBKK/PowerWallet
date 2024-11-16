@@ -7,6 +7,12 @@ import { useAccount } from "wagmi";
 import { PlusIcon, WalletIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { useWriteContract } from "wagmi";
+import DeployedContracts from "~~/contracts/deployedContracts";
+import { useTransactor } from "~~/hooks/scaffold-eth";
+
+
+
 
 interface StrategyModalProps {
   isOpen: boolean;
@@ -18,6 +24,10 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
   const [amount, setAmount] = useState("");
   const [interval, setInterval] = useState("");
   const { writeContractAsync: writeFactoryContractAsync, isPending } = useScaffoldWriteContract("factory");
+
+
+  // const { writeContractAsync: writeWalletContractAsync, isWalletPending } = useScaffoldWriteContract({contractName:"wallet",});
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,6 +79,26 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
       toast.error(`Failed to create strategy: ${error?.message || "Unknown error"}`);
     }
   };
+
+
+
+
+
+
+
+  // const withdrawUsdc = async (walletAddress,amount) => {
+  //   writeWalletContractAsync({
+  //     address: walletAddress,
+  //     abi: DeployedContracts[84532].wallet.abi,
+  //     functionName: "withdraw",
+  //     args: [amount],
+  //   });
+
+  // };
+
+
+
+
 
   if (!isOpen) return null;
 
@@ -143,12 +173,95 @@ const StrategyModal = ({ isOpen, onClose }: StrategyModalProps) => {
 };
 
 const WalletList = ({ wallets }: { wallets: `0x${string}`[] }) => {
+
+  const { writeContractAsync: writeUSDCContractAsync, isUSDCPending } = useScaffoldWriteContract("usdc");
+
+  const approveUsdc = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // wallet address
+
+    const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
+    const amount = "1";
+
+    await writeUSDCContractAsync(
+      {
+        functionName: "approve",
+        args: [walletAddress, BigInt(amount)],
+      },
+      {
+        onBlockConfirmation: txnReceipt => {
+          console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+          toast.success("USDC approved!");
+
+        },
+      },
+    );
+
+  };
+
+  const { writeContractAsync: writeWalletContractAsync, isWalletPending } = useWriteContract();
+  const writeTx = useTransactor();
+
+
+  const depositUsdc = async () => {
+    const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
+    const amount = 1n;
+    const writeContractAsyncWithParams = () =>
+      writeWalletContractAsync({
+        address: walletAddress,
+        abi: DeployedContracts[84532].wallet.abi,
+        functionName: "deposit",
+        args: [amount],
+      });
+
+
+    try {
+      await writeTx(writeContractAsyncWithParams, { blockConfirmations: 1 });
+    } catch (e) {
+      console.log("Unexpected error in writeTx", e);
+    }
+
+  };
+
+  const withdrawUsdc = async () => {
+    const walletAddress = "0x71419CB9f45A6384ed96648189076BB94b55e5F0";
+    const amount = 1n;
+    const writeContractAsyncWithParams = () =>
+      writeWalletContractAsync({
+        address: walletAddress,
+        abi: DeployedContracts[84532].wallet.abi,
+        functionName: "withdraw",
+        args: [amount],
+      });
+
+
+    try {
+      await writeTx(writeContractAsyncWithParams, { blockConfirmations: 1 });
+    } catch (e) {
+      console.log("Unexpected error in writeTx", e);
+    }
+
+  };
+
   return (
     <div className="space-y-2">
       {wallets.map(wallet => (
         <div key={wallet} className="bg-base-200 p-4 rounded-lg flex items-center gap-2">
           <WalletIcon className="h-5 w-5" />
           <Address address={wallet} />
+          <button className="btn btn-primary" onClick={approveUsdc}>
+            <PlusIcon className="h-5 w-5" />
+            Approve
+          </button>
+          <button className="btn btn-primary" onClick={depositUsdc}>
+            <PlusIcon className="h-5 w-5" />
+            Deposit
+          </button>
+          <button className="btn btn-primary" onClick={withdrawUsdc}>
+            <PlusIcon className="h-5 w-5" />
+            Withdraw
+          </button>
         </div>
       ))}
     </div>
@@ -193,6 +306,7 @@ const Dashboard: NextPage = () => {
             <div className="text-center py-12">
               <p className="text-base-content/60 mb-4">No strategies found</p>
               <p className="text-sm">Create your first strategy to get started</p>
+
             </div>
           )}
         </>
