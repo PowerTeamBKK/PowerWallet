@@ -47,5 +47,15 @@ describe("Wallet Contract", function () {
     expect(await wallet.totalWithdrawn()).to.equal(withdrawAmount * 2);
   });
 
+  it.only("Should pause", async function () {
+    const { wallet, usdc, user0, owner } = await loadFixture(deployWalletContract);
+
+ 
+
+    // Deposit and withdraw
+    //  await wallet.connect(user0).pause();
+ 
+  });
+
    
 });
